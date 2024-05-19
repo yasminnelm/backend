@@ -1,40 +1,34 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Agent;
-import com.example.backend.repository.AgentRepository;
+import com.example.backend.service.AgentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/agents")
 public class AgentRestController {
 
-    private final AgentRepository agentRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final AgentService agentService;
 
     @Autowired
-    public AgentRestController(AgentRepository agentRepository, @Lazy PasswordEncoder passwordEncoder) {
-        this.agentRepository = agentRepository;
-        this.passwordEncoder = passwordEncoder;
+    public AgentRestController(AgentService agentService) {
+        this.agentService = agentService;
     }
 
     @GetMapping
     public List<Agent> getAllAgents() {
-        return agentRepository.findAll();
+        return agentService.findAll();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Agent> getAgentById(@PathVariable Long id) {
-        return agentRepository.findById(id)
+        return agentService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -43,64 +37,50 @@ public class AgentRestController {
     public ResponseEntity<?> createAgent(@RequestParam String nom,
                                          @RequestParam String prenom,
                                          @RequestParam String email,
+                                         @RequestParam String emailConfirmation,
                                          @RequestParam String telephone,
                                          @RequestParam("cinRecto") MultipartFile cinRecto,
-                                         @RequestParam("cinVerso") MultipartFile cinVerso) {
-
-        String uid = UUID.randomUUID().toString();
-        String password = passwordEncoder.encode("temporaryPassword");
-
-        Agent agent = new Agent();
-        agent.setUid(uid);
-        agent.setPassword(password);
-        agent.setNom(nom);
-        agent.setPrenom(prenom);
-        agent.setEmail(email);
-        agent.setTelephone(telephone);
-        agent.setFirstLogin(true);
+                                         @RequestParam("cinVerso") MultipartFile cinVerso,
+                                         @RequestParam String numCin,
+                                         @RequestParam String adresse,
+                                         @RequestParam String description,
+                                         @RequestParam String dateNaissance,//change to date
+                                         @RequestParam Long numPatente,
+                                         @RequestParam Long numRegCom) {
 
         try {
-            byte[] cinRectoPath =cinRecto.getBytes();
-            byte[] cinVersoPath =cinVerso.getBytes();
-            agent.setCinRectoPath(cinRectoPath);
-            agent.setCinVersoPath(cinVersoPath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("Error saving files");
+            Agent agent = agentService.createAgent( nom,  prenom,  email,  emailConfirmation,
+                       numCin,  adresse,  telephone,  description,
+                     cinRecto,  cinVerso,  dateNaissance, numPatente,  numRegCom);
+            return ResponseEntity.ok(agent);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body("error saving Agent"+e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body(e.getMessage());
         }
-
-        agentRepository.save(agent);
-        return ResponseEntity.ok(agent);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Agent> updateAgent(@PathVariable Long id, @RequestBody Agent updatedAgent) {
-        return agentRepository.findById(id)
-                .map(agent -> {
-                    agent.setNom(updatedAgent.getNom());
-                    agent.setPrenom(updatedAgent.getPrenom());
-                    agent.setEmail(updatedAgent.getEmail());
-                    agent.setTelephone(updatedAgent.getTelephone());
-                    agentRepository.save(agent);
-                    return ResponseEntity.ok(agent);
-                })
-                .orElse(ResponseEntity.notFound().build());
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Agent> updateAgent(@PathVariable Long id, @RequestBody Agent updatedAgent) {
+//        try {
+//            Agent agent = agentService.updateAgent(id, updatedAgent);
+//            return ResponseEntity.ok(agent);
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(400).body("no");
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.status(500).body("ok");
+//        }
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAgent(@PathVariable Long id) {
-        if (agentRepository.existsById(id)) {
-            agentRepository.deleteById(id);
+        try {
+            agentService.deleteAgent(id);
             return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body(e.getMessage());
         }
-    }
-
-    private String saveFile(MultipartFile file) throws IOException {
-        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-        File dest = new File("uploads/" + fileName);
-        file.transferTo(dest);
-        return dest.getAbsolutePath();
     }
 }
