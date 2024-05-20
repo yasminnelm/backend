@@ -57,7 +57,7 @@ public class AgentService {
         agent.setDateNaissance(dateNaissance);
         agent.setNumPatente(numPatente);
         agent.setNumRegCom(numRegCom);
-//        agent.setFirstLogin(true);
+        agent.setFirstLogin(true);
 
         try {
             byte[] cinRectoPath = cinRecto.getBytes();
