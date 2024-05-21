@@ -35,7 +35,7 @@ public class AgentRestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<?> createAgent(@RequestParam String nom,
                                          @RequestParam String prenom,
                                          @RequestParam String email,
