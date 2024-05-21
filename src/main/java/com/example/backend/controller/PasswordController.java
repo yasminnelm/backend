@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.Agent;
+import com.example.backend.model.entity.Agent;
 import com.example.backend.repository.AgentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
