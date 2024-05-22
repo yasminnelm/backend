@@ -2,11 +2,15 @@ package com.example.backend.controller;
 
 import com.example.backend.model.Agent;
 import com.example.backend.service.AgentService;
+
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 
@@ -25,6 +29,8 @@ public class AgentRestController {
     public List<Agent> getAllAgents() {
         return agentService.findAll();
     }
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Agent> getAgentById(@PathVariable Long id) {
@@ -59,6 +65,25 @@ public class AgentRestController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password){
+        Agent agent = agentService.findAgent(email);
+        if (agent == null) {
+            return ResponseEntity.status(404).body("Agent not found");
+        }
+        if (!agent.getPassword().equals(password)) {
+            return ResponseEntity.status(401).body("Incorrect password");
+        }
+
+        if (agent.isFirstLogin()) {
+            return ResponseEntity.status(302).body("First login, change your password");
+        }
+
+        return ResponseEntity.ok(agent);
+    }
+
+
 
 //    @PutMapping("/{id}")
 //    public ResponseEntity<Agent> updateAgent(@PathVariable Long id, @RequestBody Agent updatedAgent) {

@@ -27,6 +27,11 @@ public class AgentService {
         this.mailPasswordService = mailPasswordService;
     }
 
+    public Agent findAgent(String email) {
+        return agentRepository.findAgentByEmail(email);
+    }
+
+
 
     public Agent createAgent(String nom, String prenom, String email, String emailConfirmation,
                               String numCin, String adresse, String telephone, String description,
@@ -57,7 +62,6 @@ public class AgentService {
         agent.setDateNaissance(dateNaissance);
         agent.setNumPatente(numPatente);
         agent.setNumRegCom(numRegCom);
-        agent.setFirstLogin(true);
 
         try {
             byte[] cinRectoPath = cinRecto.getBytes();
