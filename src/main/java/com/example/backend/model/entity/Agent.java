@@ -31,5 +31,5 @@ public class Agent {
     private String dateNaissance;
     private Long numPatente;
     private Long numRegCom;
-    private boolean firstLogin;
+    private boolean firstLogin = true;
 }

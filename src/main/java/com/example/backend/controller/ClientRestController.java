@@ -32,15 +32,13 @@ public class ClientRestController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    @PostMapping("/add")
+    @PostMapping("")
     public ResponseEntity<?> createClient(@RequestParam String nom,
                                           @RequestParam String prenom,
                                           @RequestParam String email,
                                           @RequestParam String telephone,
                                           @RequestParam("cinRecto") MultipartFile cinRecto,
-                                          @RequestParam("cinVerso") MultipartFile cinVerso,
-                                          @RequestParam String compteType,
-                                          @RequestParam double plafond
+                                          @RequestParam("cinVerso") MultipartFile cinVerso
     ) {
 
         try {
@@ -48,7 +46,7 @@ public class ClientRestController {
             byte[] cinVersoBytes = cinVerso.getBytes();
 
             ClientDTO clientDTO = clientService.createClient(nom, prenom,email,telephone,
-                    cinRectoBytes, cinVersoBytes,compteType,plafond);
+                    cinRectoBytes, cinVersoBytes);
 
             return ResponseEntity.ok(clientDTO);
         } catch (IllegalArgumentException e) {

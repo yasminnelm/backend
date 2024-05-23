@@ -15,13 +15,13 @@ public class ClientMapper {
                 client.getId(),
                 client.getNom(),
                 client.getPrenom(),
-                client.getTelephone(),
                 client.getEmail(),
+                client.getTelephone(),
+                client.getPassword(),
                 client.getCinRectoPath(),
                 client.getCinVersoPath(),
-                client.getCompteType(),
-                client.getPlafond()
-        );
+                client.isFirstLogin());
+
     }
     //Conversion du ClientDTO en Client
     public static Client toEntity(ClientDTO clientDTO) {
@@ -34,10 +34,10 @@ public class ClientMapper {
                 clientDTO.getPrenom(),
                 clientDTO.getEmail(),
                 clientDTO.getTelephone(),
+                clientDTO.getPassword(),
                 clientDTO.getCinRectoPath(),
                 clientDTO.getCinVersoPath(),
-                clientDTO.getCompteType(),
-                clientDTO.getPlafond());
+                clientDTO.isFirstLogin());
     }
 
 }

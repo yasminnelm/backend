@@ -2,7 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.model.dto.ClientDTO;
 import com.example.backend.model.entity.Client;
-import com.example.backend.model.enumeration.CompteType;
+
 import com.example.backend.model.mapper.ClientMapper;
 import com.example.backend.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +27,7 @@ public class ClientService {
     }
     public ClientDTO createClient(String nom, String prenom,String email,
                                   String telephone, byte[] cinRectoPath,
-                                  byte[] cinVersoPath, String compteType,double plafond) {
-
-        // Convertir le String en CompteType
-        CompteType type = CompteType.fromDescriptionOrPlafond(compteType);
-
-
+                                  byte[] cinVersoPath) {
 
         telephone = "+" + telephone;
         // Confirmation du numéro de téléphone
@@ -51,8 +46,7 @@ public class ClientService {
         client.setTelephone(telephone);
         client.setCinRectoPath(cinRectoPath);
         client.setCinVersoPath(cinVersoPath);
-        client.setCompteType(type);
-        client.setPlafond(plafond);
+        client.setPassword(passwordEncoder.encode(password));
 
         Client savedClient = clientRepository.save(client);
         mailPasswordService.sendPasswordByEmail(email, password);
@@ -81,8 +75,6 @@ public class ClientService {
             client.setEmail(updatedClientDTO.getEmail());
             client.setCinRectoPath(updatedClientDTO.getCinRectoPath());
             client.setCinVersoPath(updatedClientDTO.getCinVersoPath());
-            client.setCompteType(updatedClientDTO.getCompteType());
-            client.setPlafond(updatedClientDTO.getPlafond());
 
             Client updatedClient = clientRepository.save(client);
             return ClientMapper.toDto(updatedClient);

@@ -16,8 +16,8 @@ public class ClientDTO {
     String prenom;
     String email;
     String telephone;
+    String password;
     private byte[] cinRectoPath;
     private byte[] cinVersoPath;
-    private CompteType compteType;
-    private double plafond;
+    private boolean firstLogin;
 }

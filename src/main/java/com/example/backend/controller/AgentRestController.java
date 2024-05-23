@@ -1,7 +1,6 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.dto.AgentDTO;
-import com.example.backend.model.entity.Agent;
 import com.example.backend.service.AgentService;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,15 +18,14 @@ public class Client {
     String prenom;
     String email;
     String telephone;
+    private String password;
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] cinRectoPath;
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] cinVersoPath;
-    @Enumerated(EnumType.STRING)
-    @Column(length = 125)
-    CompteType compteType;
-    private double plafond;
+    private boolean firstLogin = true;
+
 
 }
