@@ -1,6 +1,8 @@
 package com.example.backend.service;
 
-import com.example.backend.model.Agent;
+import com.example.backend.model.dto.AgentDTO;
+import com.example.backend.model.entity.Agent;
+import com.example.backend.model.mapper.AgentMapper;
 import com.example.backend.repository.AgentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,10 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AgentService {
@@ -27,31 +29,27 @@ public class AgentService {
         this.mailPasswordService = mailPasswordService;
     }
 
-    public Agent findAgent(String email) {
-        return agentRepository.findAgentByEmail(email);
-    }
-
-
-
-    public Agent createAgent(String nom, String prenom, String email, String emailConfirmation,
-                              String numCin, String adresse, String telephone, String description,
-                             MultipartFile cinRecto, MultipartFile cinVerso, String  dateNaissance,
-                             Long numPatente, Long numRegCom) {
+    public AgentDTO createAgent(String nom, String prenom, String email, String emailConfirmation,
+                                String numCin, String adresse, String telephone, String description,
+                                String dateNaissance, Long numPatente, Long numRegCom,
+                                byte[] cinRectoPath, byte[] cinVersoPath) {
         //confirmation de l'email
         if (!email.equals(emailConfirmation)) {
             throw new IllegalArgumentException("Email does not match confirmation");
         }
         //confirmation du numero de telephone
+        telephone = "+" + telephone;
         if (!telephone.matches("^\\+212[6-7][0-9]{8}$")) {
-            throw new IllegalArgumentException("phone number does not match the moroccan form");
+            throw new IllegalArgumentException("Phone number does not match the moroccan form");
         }
 
         String uid = UUID.randomUUID().toString();
         String password=mailPasswordService.generateDefaultPassword();
+
         Agent agent = new Agent();
         agent.setUid(uid);
 
-        agent.setPassword(password);
+        agent.setPassword(passwordEncoder.encode(password));
         agent.setNom(nom);
         agent.setPrenom(prenom);
         agent.setEmail(email);
@@ -64,41 +62,67 @@ public class AgentService {
         agent.setNumRegCom(numRegCom);
 
         try {
-            byte[] cinRectoPath = cinRecto.getBytes();
-            byte[] cinVersoPath = cinVerso.getBytes();
             agent.setCinRectoPath(cinRectoPath);
             agent.setCinVersoPath(cinVersoPath);
-        } catch (IOException e) {
-            throw new RuntimeException("Error saving files", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving CIN files", e);
         }
         Agent savedAgent = agentRepository.save(agent);
         mailPasswordService.sendPasswordByEmail(email, password);
 
-        return savedAgent;
+        return AgentMapper.toDto(savedAgent);
 
     }
-     public List<Agent> findAllAgents()
+
+
+     public List<AgentDTO> findAllAgents()
          {
-             return agentRepository.findAll();
+             return agentRepository.findAll().stream()
+                     .map(AgentMapper::toDto)
+                     .collect(Collectors.toList());
          }
-     public Optional<Agent> getAgentById(Long id)
+
+
+     public Optional<AgentDTO> getAgentById(Long id)
      {
-         return agentRepository.findById(id);
+         return agentRepository.findById(id)
+                 .map(AgentMapper::toDto);
      }
 
-     public List<Agent> findAll() {
-        return  agentRepository.findAll();
+    public AgentDTO getAgentByEmail(String email)
+    {
+        return AgentMapper.toDto(
+                agentRepository.findAgentByEmail(email)
+        );
     }
 
-    public Optional<Agent> findById(Long id) {
-        return agentRepository.findById(id);
-    }
-//*************************************************************************************
-    public Agent updateAgent(Long id, Agent updatedAgent) {
-        return updatedAgent;
+    public AgentDTO updateAgent(Long id, AgentDTO updatedAgentDTO) {
+        Optional<Agent> optionalAgent = agentRepository.findById(id);
+        if (optionalAgent.isPresent()) {
+            Agent agent = optionalAgent.get();
+            agent.setNom(updatedAgentDTO.getNom());
+            agent.setPrenom(updatedAgentDTO.getPrenom());
+            agent.setEmail(updatedAgentDTO.getEmail());
+            agent.setNumCin(updatedAgentDTO.getNumCin());
+            agent.setAdresse(updatedAgentDTO.getAdresse());
+            agent.setTelephone(updatedAgentDTO.getTelephone());
+            agent.setDescription(updatedAgentDTO.getDescription());
+            agent.setDateNaissance(updatedAgentDTO.getDateNaissance());
+            agent.setNumPatente(updatedAgentDTO.getNumPatente());
+            agent.setNumRegCom(updatedAgentDTO.getNumRegCom());
+            agent.setFirstLogin(updatedAgentDTO.isFirstLogin());
+            // Note: Password is not updated here for security reasons.
+
+            Agent updatedAgent = agentRepository.save(agent);
+            return AgentMapper.toDto(updatedAgent);
+        } else {
+            throw new IllegalArgumentException("Agent not found");
+        }
     }
 
     public void deleteAgent(Long id) {
         agentRepository.deleteById(id);
     }
+
+
 }

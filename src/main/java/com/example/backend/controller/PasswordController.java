@@ -1,11 +1,10 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.Agent;
+import com.example.backend.model.entity.Agent;
 import com.example.backend.repository.AgentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +17,13 @@ public class PasswordController {
 
     AgentRepository agentRepository;
     PasswordEncoder passwordEncoder;
+
     @Autowired
     public PasswordController(AgentRepository agentRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.agentRepository = agentRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
     @PostMapping("/change")
     public ResponseEntity<?> changePassword(
             @RequestParam("email") String email,

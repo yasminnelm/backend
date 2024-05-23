@@ -1,19 +1,13 @@
-package com.example.backend.model;
+package com.example.backend.model.dto;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
-import java.sql.Date;
-
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@Entity
-public class Agent {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class AgentDTO {
     private Long id;
     private String uid;
     private String nom;
@@ -24,14 +18,10 @@ public class Agent {
     private String adresse;
     private String telephone;
     private String description;
-    @Lob
-    @Column(columnDefinition = "LONGBLOB")
     private byte[] cinRectoPath;
-    @Lob
-    @Column(columnDefinition = "LONGBLOB")
     private byte[] cinVersoPath;
     private String dateNaissance;
     private Long numPatente;
     private Long numRegCom;
-    private boolean firstLogin = true;
+    private boolean firstLogin;
 }

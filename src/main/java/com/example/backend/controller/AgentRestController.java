@@ -1,17 +1,15 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.Agent;
+import com.example.backend.model.dto.AgentDTO;
+import com.example.backend.model.entity.Agent;
 import com.example.backend.service.AgentService;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -26,20 +24,18 @@ public class AgentRestController {
     }
 
     @GetMapping
-    public List<Agent> getAllAgents() {
-        return agentService.findAll();
+    public List<AgentDTO> getAllAgents() {
+        return agentService.findAllAgents();
     }
 
-
-
     @GetMapping("/{id}")
-    public ResponseEntity<Agent> getAgentById(@PathVariable Long id) {
-        return agentService.findById(id)
+    public ResponseEntity<AgentDTO> getAgentById(@PathVariable Long id) {
+        return agentService.getAgentById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<?> createAgent(@RequestParam String nom,
                                          @RequestParam String prenom,
                                          @RequestParam String email,
@@ -50,37 +46,41 @@ public class AgentRestController {
                                          @RequestParam String numCin,
                                          @RequestParam String adresse,
                                          @RequestParam String description,
-                                         @RequestParam String dateNaissance,//change to date
+                                         @RequestParam String dateNaissance,
                                          @RequestParam Long numPatente,
                                          @RequestParam Long numRegCom) {
 
         try {
-            Agent agent = agentService.createAgent( nom,  prenom,  email,  emailConfirmation,
-                       numCin,  adresse,  telephone,  description,
-                     cinRecto,  cinVerso,  dateNaissance, numPatente,  numRegCom);
-            return ResponseEntity.ok(agent);
+            byte[] cinRectoBytes = cinRecto.getBytes();
+            byte[] cinVersoBytes = cinVerso.getBytes();
+            AgentDTO agentDTO = agentService.createAgent(nom, prenom, email, emailConfirmation,
+                    numCin, adresse, telephone, description, dateNaissance, numPatente, numRegCom,
+                    cinRectoBytes, cinVersoBytes);
+            return ResponseEntity.ok(agentDTO);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).body("error saving Agent"+e.getMessage());
+            return ResponseEntity.status(400).body("Error saving Agent"+e.getMessage());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+            return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Error reading CIN files: " + e.getMessage());
         }
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password){
-        Agent agent = agentService.findAgent(email);
-        if (agent == null) {
+        AgentDTO agentDTO = agentService.getAgentByEmail(email);
+        if (agentDTO == null) {
             return ResponseEntity.status(404).body("Agent not found");
         }
-        if (!agent.getPassword().equals(password)) {
+        if (!agentDTO.getPassword().equals(password)) {
             return ResponseEntity.status(401).body("Incorrect password");
         }
 
-        if (agent.isFirstLogin()) {
+        if (agentDTO.isFirstLogin()) {
             return ResponseEntity.status(302).body("First login, change your password");
         }
 
-        return ResponseEntity.ok(agent);
+        return ResponseEntity.ok(agentDTO);
     }
 
 
