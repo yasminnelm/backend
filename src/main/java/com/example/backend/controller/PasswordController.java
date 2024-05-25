@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
-import com.example.backend.model.dto.ClientDTO;
+
+import com.example.backend.jwt.JwtProvider;
 import com.example.backend.model.entity.Agent;
 import com.example.backend.model.entity.Client;
 import com.example.backend.repository.AgentRepository;
@@ -8,53 +9,86 @@ import com.example.backend.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+
 @RestController
-@RequestMapping("/pwd")
+@RequestMapping("/password")
 public class PasswordController {
 
-    AgentRepository agentRepository;
-    ClientRepository clientRepository;
-    PasswordEncoder passwordEncoder;
+
+    private final AgentRepository agentRepository;
+    private final ClientRepository clientRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
+
 
     @Autowired
-    public PasswordController(AgentRepository agentRepository, @Lazy PasswordEncoder passwordEncoder,ClientRepository clientRepository) {
+    public PasswordController(AgentRepository agentRepository, ClientRepository clientRepository, PasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
         this.agentRepository = agentRepository;
         this.clientRepository = clientRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtProvider = jwtProvider;
     }
 
-    @PostMapping("/change-agent")
+    @PostMapping("/agent")
     public ResponseEntity<?> changeAgentPassword(
             @RequestParam("email") String email,
             @RequestParam("newPassword") String newPassword,
             @RequestParam("confirmPassword") String confirmPassword) {
 
+        //diksa3a flfront, when the user tries to log in, redirect him to this page along with his email
+        //so it can be filled here automatically
+        //it wasnt possible to do it from the backend
         Agent agent = agentRepository.findAgentByEmail(email);
+
         if (agent == null) {
             return ResponseEntity.status(404).body("Agent not found");
         }
         if(!newPassword.equals(confirmPassword)) {
             return ResponseEntity.status(400).body("Passwords do not match");
+        } else {
+            agent.setPassword(newPassword);
+            agent.setFirstLogin(false);
+            agentRepository.save(agent);
+            Authentication authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            email,
+                            newPassword,
+                            Collections.singletonList(
+                                    new SimpleGrantedAuthority("ROLE_AGENT")
+                            )
+
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+            String token = jwtProvider.generateToken(authentication);
+
+            return ResponseEntity.status(200).body(token);
         }
-        agent.setPassword(newPassword);
-        agent.setFirstLogin(false);
-        agentRepository.save(agent);
-        return ResponseEntity.ok().body("Password changed successfully");
+
+
     }
 
-    @PostMapping("/change-client")
+    @PostMapping("/client")
     public ResponseEntity<?> changeClientPassword(
             @RequestParam("email") String email,
             @RequestParam("newPassword") String newPassword,
             @RequestParam("confirmPassword") String confirmPassword) {
 
         Client client = clientRepository.findClientByEmail(email);
+
         if (client == null) {
             return ResponseEntity.status(404).body("Agent not found");
         }
@@ -64,7 +98,21 @@ public class PasswordController {
         client.setPassword(newPassword);
         client.setFirstLogin(false);
         clientRepository.save(client);
-        return ResponseEntity.ok().body("Password changed successfully");
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(
+                        email,
+                        newPassword,
+                        Collections.singletonList(
+                                new SimpleGrantedAuthority("ROLE_CLIENT")
+                        )
+
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+        String token = jwtProvider.generateToken(authentication);
+
+        return ResponseEntity.ok(token);
     }
 
 }

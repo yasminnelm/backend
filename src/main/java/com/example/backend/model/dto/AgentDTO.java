@@ -1,5 +1,6 @@
 package com.example.backend.model.dto;
 
+import com.example.backend.model.Roles;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -24,4 +25,5 @@ public class AgentDTO {
     private Long numPatente;
     private Long numRegCom;
     private boolean firstLogin;
+    private Roles role;
 }

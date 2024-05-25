@@ -65,22 +65,6 @@ public class AgentRestController {
         }
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password){
-        AgentDTO agentDTO = agentService.getAgentByEmail(email);
-        if (agentDTO == null) {
-            return ResponseEntity.status(404).body("Agent not found");
-        }
-        if (!agentDTO.getPassword().equals(password)) {
-            return ResponseEntity.status(401).body("Incorrect password");
-        }
-
-        if (agentDTO.isFirstLogin()) {
-            return ResponseEntity.status(302).body("First login, change your password");
-        }
-
-        return ResponseEntity.ok(agentDTO);
-    }
 
 
 

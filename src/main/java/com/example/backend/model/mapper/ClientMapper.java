@@ -38,6 +38,7 @@ public class ClientMapper {
                 clientDTO.getCinRectoPath(),
                 clientDTO.getCinVersoPath(),
                 clientDTO.isFirstLogin());
+
     }
 
 }

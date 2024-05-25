@@ -1,5 +1,6 @@
 package com.example.backend.model.entity;
 
+import com.example.backend.model.Roles;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,4 +33,7 @@ public class Agent {
     private Long numPatente;
     private Long numRegCom;
     private boolean firstLogin = true;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Roles role = Roles.ROLE_AGENT;
 }

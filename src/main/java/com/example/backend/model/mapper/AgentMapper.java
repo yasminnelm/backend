@@ -27,7 +27,8 @@ public class AgentMapper {
                 agent.getDateNaissance(),
                 agent.getNumPatente(),
                 agent.getNumRegCom(),
-                agent.isFirstLogin()
+                agent.isFirstLogin(),
+                agent.getRole()
         );
     }
 
@@ -53,7 +54,9 @@ public class AgentMapper {
                 agentDTO.getDateNaissance(),
                 agentDTO.getNumPatente(),
                 agentDTO.getNumRegCom(),
-                agentDTO.isFirstLogin()
+                agentDTO.isFirstLogin(),
+                agentDTO.getRole()
+
         );
     }
 }

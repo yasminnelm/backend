@@ -65,6 +65,11 @@ public class ClientService {
                 .map(ClientMapper::toDto);
     }
 
+//    public Optional<ClientDTO> getClientByEmail(String email) {
+//        return ClientMapper.toDto(clientRepository.findClientByEmail(email));
+//
+//    }
+
     public ClientDTO updateClient(Long id, ClientDTO updatedClientDTO) {
         Optional<Client> optionalClient = clientRepository.findById(id);
         if (optionalClient.isPresent()) {
