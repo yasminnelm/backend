@@ -33,9 +33,9 @@ public class Client {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Roles role = Roles.ROLE_CLIENT;
-
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Compte> comptes;
+//
+//    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Compte> comptes;
 
     public Client(Long id, String nom, String prenom, String email, String telephone,
                   String password, byte[] cinRectoPath, byte[] cinVersoPath, boolean firstLogin) {
