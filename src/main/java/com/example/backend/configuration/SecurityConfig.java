@@ -10,8 +10,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -38,13 +40,13 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(Authorize -> Authorize
-                                .requestMatchers("/login/**","/password/agent","/password/client")
+                                .requestMatchers("/login")
                                 .permitAll()
                                 .requestMatchers("api/agents/")
-                                .hasRole("AGENT")
+                                .hasAnyRole("AGENT","ADMIN")
                                 .requestMatchers("api/clients/")
-                                .hasRole("CLIENT")
-                                .requestMatchers("/login/agent","/login/client").permitAll()
+                                .hasAnyRole("ADMIN","AGENT")
+//                                .requestMatchers("/login/agent","/login/client", "/login/admin").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
@@ -64,6 +66,14 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/",configuration);
 
         return source;
+    }
+
+    @Bean
+    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
+        PasswordEncoder passwordEncoder = passwordEncoder();
+        return new InMemoryUserDetailsManager(
+                User.withUsername("admin").password(passwordEncoder.encode("12345")).roles("ADMIN").build()
+        );
     }
 
 
