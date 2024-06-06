@@ -42,9 +42,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(Authorize -> Authorize
                                 .requestMatchers("/login")
                                 .permitAll()
-                                .requestMatchers("api/agents/")
-                                .hasAnyRole("AGENT","ADMIN")
-                                .requestMatchers("api/clients/")
+                                .requestMatchers("api/agents")
+                                .hasRole("ADMIN")
+                                .requestMatchers("api/clients")
                                 .hasAnyRole("ADMIN","AGENT")
 //                                .requestMatchers("/login/agent","/login/client", "/login/admin").permitAll()
                                 .anyRequest().authenticated()

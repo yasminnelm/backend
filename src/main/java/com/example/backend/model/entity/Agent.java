@@ -17,6 +17,7 @@ public class Agent {
     private String uid;
     private String nom;
     private String prenom;
+    @Column(unique = true)
     private String email;
     private String password;
     private String numCin;
