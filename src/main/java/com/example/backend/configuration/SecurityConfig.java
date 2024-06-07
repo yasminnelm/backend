@@ -3,8 +3,10 @@ package com.example.backend.configuration;
 
 
 import com.example.backend.jwt.JwtTokenValidator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,8 +26,12 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-
+@PropertySource("classpath:application.properties")
 public class SecurityConfig {
+    @Value("${cmi.service.url}")
+    private String cmiServiceUrl;
+
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -46,6 +52,8 @@ public class SecurityConfig {
                                 .hasRole("ADMIN")
                                 .requestMatchers("api/clients")
                                 .hasAnyRole("ADMIN","AGENT")
+                                .requestMatchers("api/cmi/verify")
+                                .permitAll()
 //                                .requestMatchers("/login/agent","/login/client", "/login/admin").permitAll()
                                 .anyRequest().authenticated()
                 )

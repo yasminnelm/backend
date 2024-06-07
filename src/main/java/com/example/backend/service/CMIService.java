@@ -1,32 +1,53 @@
 package com.example.backend.service;
 
 import com.example.backend.model.dto.ClientDTO;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 public class CMIService {
 
+
     private final RestTemplate restTemplate;
-    private final String cmiUrl;
+    @Value("${cmi.service.url}")
+    private  String cmiUrl;
 
     @Autowired
-    public CMIService(RestTemplate restTemplate, @Value("${cmi.service.url}") String cmiUrl) {
+    public CMIService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.cmiUrl = cmiUrl;
     }
 
-    public boolean createAccountWithCMI(ClientDTO clientDTO) {
-        String url = cmiUrl + "/createAccount";
+
+    public boolean isResponseFavorable() {
+        String url = cmiUrl + "verify";
+
         try {
-            ResponseEntity<String> response = restTemplate.postForEntity(url, clientDTO, String.class);
-            return response.getStatusCode().is2xxSuccessful();
+            ResponseEntity<CmiResponse> response = restTemplate.postForEntity(url, null, CmiResponse.class);
+
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                return response.getBody().isFavorable();
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+}
+
+
+
+
+@Data
+class CmiResponse {
+    private boolean favorable;
+
+
 }

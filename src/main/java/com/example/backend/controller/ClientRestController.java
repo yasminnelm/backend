@@ -76,26 +76,33 @@ package com.example.backend.controller;
 
 import com.example.backend.model.dto.ClientDTO;
 import com.example.backend.model.dto.CMIResponseDTO;
+import com.example.backend.model.mapper.ClientMapper;
 import com.example.backend.service.CMIService;
 import com.example.backend.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 @RestController
+@PreAuthorize("hasAuthority('ROLE_AGENT')")
 @RequestMapping("/api/clients")
 public class ClientRestController {
 
     private final ClientService clientService;
     private final CMIService cmiService;
+    private final String cmiUrl;
+
 
     @Autowired
-    public ClientRestController(ClientService clientService, CMIService cmiService) {
+    public ClientRestController(ClientService clientService, CMIService cmiService,  @Value("${cmi.service.url}") String cmiUrl) {
         this.clientService = clientService;
         this.cmiService = cmiService;
+        this.cmiUrl = cmiUrl;
     }
 
     @PostMapping("")
@@ -104,8 +111,8 @@ public class ClientRestController {
                                           @RequestParam String email,
                                           @RequestParam String telephone,
                                           @RequestParam("cinRecto") MultipartFile cinRecto,
-                                          @RequestParam("cinVerso") MultipartFile cinVerso) {
-
+                                          @RequestParam("cinVerso") MultipartFile cinVerso,
+                                          @RequestHeader("Authorization") String authorizationHeader) {
         try {
             byte[] cinRectoBytes = cinRecto.getBytes();
             byte[] cinVersoBytes = cinVerso.getBytes();
@@ -118,17 +125,16 @@ public class ClientRestController {
             clientDTO.setCinRectoPath(cinRectoBytes);
             clientDTO.setCinVersoPath(cinVersoBytes);
 
-            // Call CMI service to create account
-            boolean accountCreated = cmiService.createAccountWithCMI(clientDTO);
+            // Extract token from Authorization header
+//            String token = authorizationHeader.replace("Bearer ", "");
+//
+//            // Call CMI service to create account
+//            boolean accountCreated = cmiService.createAccountWithCMI(clientDTO, token);
 
-            if (accountCreated) {
                 // If account creation with CMI is successful, proceed with creating client in your platform
-                clientService.createClient(clientDTO.getNom(), clientDTO.getPrenom(), clientDTO.getEmail(), clientDTO.getTelephone(), clientDTO.getCinRectoPath(), clientDTO.getCinVersoPath());
+                clientService.registerClient(ClientMapper.toEntity(clientDTO));
                 return ResponseEntity.ok("Account created successfully in JIBI");
-            } else {
-                // If account creation fails, return error message
-                return ResponseEntity.status(400).body("Error creating account with CMI");
-            }
+
 
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Error reading files: " + e.getMessage());
@@ -136,4 +142,5 @@ public class ClientRestController {
             return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
         }
     }
+
 }
