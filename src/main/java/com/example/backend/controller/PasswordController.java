@@ -47,9 +47,7 @@ public class PasswordController {
             @RequestParam("newPassword") String newPassword,
             @RequestParam("confirmPassword") String confirmPassword) {
 
-        //diksa3a flfront, when the user tries to log in, redirect him to this page along with his email
-        //so it can be filled here automatically
-        //it wasnt possible to do it from the backend
+
         Agent agent = agentRepository.findAgentByEmail(email);
 
         if (agent == null) {

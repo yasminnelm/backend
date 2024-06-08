@@ -10,10 +10,6 @@ import org.mapstruct.factory.Mappers;
 public interface BillerMapper {
 
     BillerMapper INSTANCE = Mappers.getMapper(BillerMapper.class);
-
-    @Mapping(source = "bills", target = "billIds")
-    @Mapping(source = "invoices", target = "invoiceIds")
-    @Mapping(source = "professionalBankAccount.id", target = "professionalBankAccountId")
     BillerDTO toDto(Biller biller);
 
     Biller toEntity(BillerDTO billerDTO);

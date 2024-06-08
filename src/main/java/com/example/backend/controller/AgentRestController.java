@@ -37,25 +37,25 @@ public class AgentRestController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createAgent(@RequestParam String nom,
-                                         @RequestParam String prenom,
+    public ResponseEntity<?> createAgent(@RequestParam String lastname,
+                                         @RequestParam String firstname,
                                          @RequestParam String email,
                                          @RequestParam String emailConfirmation,
-                                         @RequestParam String telephone,
+                                         @RequestParam String phonenumber,
                                          @RequestParam("cinRecto") MultipartFile cinRecto,
                                          @RequestParam("cinVerso") MultipartFile cinVerso,
                                          @RequestParam String numCin,
-                                         @RequestParam String adresse,
+                                         @RequestParam String address,
                                          @RequestParam String description,
-                                         @RequestParam String dateNaissance,
-                                         @RequestParam Long numPatente,
+                                         @RequestParam String birthdate,
+                                         @RequestParam Long numLicence,
                                          @RequestParam Long numRegCom) {
 
         try {
             byte[] cinRectoBytes = cinRecto.getBytes();
             byte[] cinVersoBytes = cinVerso.getBytes();
-            AgentDTO agentDTO = agentService.createAgent(nom, prenom, email, emailConfirmation,
-                    numCin, adresse, telephone, description, dateNaissance, numPatente, numRegCom,
+            AgentDTO agentDTO = agentService.createAgent(lastname, firstname, email, emailConfirmation,
+                    numCin, address, phonenumber, description, birthdate, numLicence, numRegCom,
                     cinRectoBytes, cinVersoBytes);
             return ResponseEntity.ok(agentDTO);
         } catch (IllegalArgumentException e) {
