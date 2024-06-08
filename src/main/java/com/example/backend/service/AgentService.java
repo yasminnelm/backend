@@ -16,14 +16,14 @@ import java.util.stream.Collectors;
 @Service
 public class AgentService {
     private final AgentRepository agentRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
     private final MailPasswordService mailPasswordService;
 
 
     @Autowired
-    public AgentService(AgentRepository agentRepo, PasswordEncoder passwordEncoder, MailPasswordService mailPasswordService) {
+    public AgentService(AgentRepository agentRepo, MailPasswordService mailPasswordService) {
         this.agentRepository = agentRepo;
-        this.passwordEncoder = passwordEncoder;
+//        this.passwordEncoder = passwordEncoder;
         this.mailPasswordService = mailPasswordService;
     }
 
@@ -47,7 +47,7 @@ public class AgentService {
         Agent agent = new Agent();
         agent.setUid(uid);
 
-        agent.setPassword(passwordEncoder.encode(password));
+        agent.setPassword(password);
         agent.setLastname(lastname);
         agent.setFirstname(firstname);
         agent.setEmail(email);

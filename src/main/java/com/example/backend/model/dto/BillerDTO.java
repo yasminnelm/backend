@@ -14,5 +14,4 @@ public class BillerDTO {
     private String billCategory;
     private List<Long> billIds;
     private List<Long> invoiceIds;
-    private Long professionalBankAccountId;
 }

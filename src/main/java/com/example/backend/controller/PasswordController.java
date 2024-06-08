@@ -29,15 +29,15 @@ public class PasswordController {
 
     private final AgentRepository agentRepository;
     private final ClientRepository clientRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
 
 
     @Autowired
-    public PasswordController(AgentRepository agentRepository, ClientRepository clientRepository, PasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
+    public PasswordController(AgentRepository agentRepository, ClientRepository clientRepository, JwtProvider jwtProvider) {
         this.agentRepository = agentRepository;
         this.clientRepository = clientRepository;
-        this.passwordEncoder = passwordEncoder;
+//        this.passwordEncoder = passwordEncoder;
         this.jwtProvider = jwtProvider;
     }
 

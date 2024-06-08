@@ -32,10 +32,10 @@ public class SecurityConfig {
     private String cmiServiceUrl;
 
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -46,40 +46,40 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(Authorize -> Authorize
-                                .requestMatchers("/login")
+                                .requestMatchers("/login","/password")
                                 .permitAll()
                                 .requestMatchers("/api/agents")
                                 .hasRole("ADMIN")
                                 .requestMatchers("/api/clients")
                                 .hasAnyRole("ADMIN","AGENT")
-                                .requestMatchers("/api/cmi")
+                                .requestMatchers("/api/verify")
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-                .csrf((csrf) -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                .csrf((csrf) -> csrf.disable());
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return http.build();
     }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.applyPermitDefaultValues();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/",configuration);
-
-        return source;
-    }
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.applyPermitDefaultValues();
+//        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+//        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
+//        configuration.setAllowCredentials(true);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/",configuration);
+//
+//        return source;
+//    }
 
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
-        PasswordEncoder passwordEncoder = passwordEncoder();
+//        PasswordEncoder passwordEncoder = passwordEncoder();
         return new InMemoryUserDetailsManager(
-                User.withUsername("admin").password(passwordEncoder.encode("12345")).roles("ADMIN").build()
+                User.withUsername("admin").password("12345").roles("ADMIN").build()
         );
     }
 

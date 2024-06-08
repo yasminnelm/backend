@@ -41,9 +41,19 @@ public class AuthController {
 
         if (agentDTO != null) {
             if (!agentDTO.getPassword().equals(password)) {
-                return ResponseEntity.status(401).body("Incorrect password");
+                return ResponseEntity.status(401).body("Incorrect Agent password");
             }
             if (agentDTO.isFirstLogin()) {
+                authentication = new UsernamePasswordAuthenticationToken(
+                        email,
+                        password,
+                        Collections.singletonList(
+                                new SimpleGrantedAuthority("ROLE_AGENT")
+                        )
+                );
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String token = jwtProvider.generateToken(authentication);
+                System.out.println(token);
                 return ResponseEntity.status(302).body("First login, change your password");
             }
             authentication = new UsernamePasswordAuthenticationToken(

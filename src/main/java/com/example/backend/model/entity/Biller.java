@@ -24,7 +24,5 @@ public class Biller {
     private List<Invoice> invoices;
 
 
-    @OneToOne
-    private ProfessionalBankAccount professionalBankAccount;
 
 }

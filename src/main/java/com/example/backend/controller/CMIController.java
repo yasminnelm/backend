@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/cmi")
+@RequestMapping("/api")
 public class CMIController {
     @Autowired
     private ClientRepository clientRepository;
@@ -24,21 +24,22 @@ public class CMIController {
     @PostMapping("/verify")
     public ResponseEntity<CmiResponse> verifyClient(@RequestBody ClientDTO clientDTO) {
         Optional<Client> clientExists = Optional.ofNullable(clientRepository.findClientByEmail(clientDTO.getEmail()));
+        System.out.println(clientExists);
         boolean isFavorable = !clientExists.isPresent();
         CmiResponse response = new CmiResponse();
         response.setFavorable(isFavorable);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/ListeCreanciers")
-    public ResponseEntity<List<BillerDTO>> listCreditors() {
-        List<BillerDTO> creditors = cmiService.getListeCreanciers();
-        return ResponseEntity.ok(creditors);
-    }
-
-    @GetMapping("/balance/{clientId}")
-    public ResponseEntity<Double> getBalance(@PathVariable Long clientId) {
-        double balance = cmiService.getBalance(clientId);
-        return ResponseEntity.ok(balance);
-    }
+//    @GetMapping("/ListeCreanciers")
+//    public ResponseEntity<List<BillerDTO>> listCreditors() {
+//        List<BillerDTO> creditors = cmiService.getListeCreanciers();
+//        return ResponseEntity.ok(creditors);
+//    }
+//
+//    @GetMapping("/balance/{clientId}")
+//    public ResponseEntity<Double> getBalance(@PathVariable Long clientId) {
+//        double balance = cmiService.getBalance(clientId);
+//        return ResponseEntity.ok(balance);
+//    }
 }

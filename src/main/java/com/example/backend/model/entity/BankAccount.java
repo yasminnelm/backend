@@ -29,6 +29,9 @@ public class BankAccount {
     //FetchType.LAZY est pour dire a hibernate de ne pas charger la collection lors de la recuperation des infos de compte
     //pour lui dire de les importer aussi on utilise le mode FetchType.EAGER
     //par defaut c'est LAZY pour que la collection ne soit chargé qu'a la demande
-    @OneToMany(mappedBy = "bankAccount",fetch = FetchType.LAZY)
-    private List<AccountOperation> accountOperationList;
+//    @OneToMany(mappedBy = "bankAccount",fetch = FetchType.LAZY)
+//    private List<AccountOperation> accountOperationList;
+    @OneToOne
+    @JoinColumn(name = "customer_id")
+    private Client customer;
 }

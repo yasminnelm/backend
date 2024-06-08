@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ClientBankAccountDTO extends BankAccountDTO {
     private String accountType;
-    private ClientDTO customer;
+
 }

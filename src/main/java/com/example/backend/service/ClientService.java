@@ -51,7 +51,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
@@ -64,9 +66,15 @@ public class ClientService {
     @Autowired
     private MailPasswordService mailPasswordService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder ;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder ;
 
+
+    public List<ClientDTO> findAllClients() {
+        return clientRepository.findAll().stream()
+                .map(ClientMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
+    }
 
 
     public Client registerClient(ClientDTO clientDTO) {
@@ -74,7 +82,7 @@ public class ClientService {
             throw new IllegalArgumentException("CMI response is not favorable");
         }
         String tempPassword = mailPasswordService.generateDefaultPassword();
-        clientDTO.setPassword(passwordEncoder.encode(tempPassword));
+        clientDTO.setPassword(tempPassword);
         return clientRepository.save(ClientMapper.INSTANCE.toEntity(clientDTO));
     }
 

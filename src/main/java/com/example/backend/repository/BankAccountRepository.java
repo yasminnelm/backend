@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
 
-    @Query("SELECT b FROM ClientBankAccount b WHERE b.customer.id = :clientId")
+    @Query("SELECT b FROM BankAccount b WHERE b.customer.id = :clientId")
     ClientBankAccount findByClientId(@Param("clientId") Long clientId);
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @PreAuthorize("hasAuthority('ROLE_AGENT')")
@@ -20,6 +21,11 @@ public class ClientRestController {
     @Autowired
     public ClientRestController(ClientService clientService) {
         this.clientService = clientService;
+    }
+
+    @GetMapping("")
+    public List<ClientDTO> findAllClients() {
+        return clientService.findAllClients();
     }
 
     @PostMapping("")

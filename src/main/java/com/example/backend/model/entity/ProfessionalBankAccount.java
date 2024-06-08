@@ -1,11 +1,11 @@
 package com.example.backend.model.entity;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @DiscriminatorValue("PA")
 public class ProfessionalBankAccount extends BankAccount{
-    @OneToOne
-    private Biller biller;
+    @OneToMany(mappedBy = "professionalBankAccount",fetch = FetchType.LAZY)
+    private List<AccountOperation> accountOperationList;
 }

@@ -22,6 +22,6 @@ public class AccountOperation {
     @Enumerated(EnumType.STRING)
     private OperationType type;
     @ManyToOne
-    private BankAccount bankAccount;
+    private ProfessionalBankAccount professionalBankAccount;
     private String description;
 }
