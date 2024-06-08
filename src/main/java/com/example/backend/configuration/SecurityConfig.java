@@ -54,7 +54,6 @@ public class SecurityConfig {
                                 .hasAnyRole("ADMIN","AGENT")
                                 .requestMatchers("api/verify")
                                 .permitAll()
-//                                .requestMatchers("/login/agent","/login/client", "/login/admin").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)

@@ -1,24 +1,27 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.dto.ClientDTO;
+import com.example.backend.model.entity.Client;
+import com.example.backend.repository.ClientRepository;
 import com.example.backend.service.CmiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
 public class CMIController {
+    @Autowired
+    private ClientRepository clientRepository;
 
     @PostMapping("/verify")
     public ResponseEntity<CmiResponse> verifyClient(@RequestBody ClientDTO clientDTO) {
-        // Simulate the logic to determine if the response is favorable
-        // For example purposes, let's say the response is always favorable if the email is not empty
-        boolean isFavorable = clientDTO.getEmail() != null && !clientDTO.getEmail().isEmpty();
-
+        Optional<Client> clientExists = Optional.ofNullable(clientRepository.findClientByEmail(clientDTO.getEmail()));
+        boolean isFavorable = !clientExists.isPresent();
         CmiResponse response = new CmiResponse();
         response.setFavorable(isFavorable);
-
         return ResponseEntity.ok(response);
     }
 }
-

@@ -70,17 +70,7 @@ public class AgentRestController {
 
 
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Agent> updateAgent(@PathVariable Long id, @RequestBody Agent updatedAgent) {
-//        try {
-//            Agent agent = agentService.updateAgent(id, updatedAgent);
-//            return ResponseEntity.ok(agent);
-//        } catch (IllegalArgumentException e) {
-//            return ResponseEntity.status(400).body("no");
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.status(500).body("ok");
-//        }
-//    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAgent(@PathVariable Long id) {
