@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BankAccountDTO {
-    private String id;
+    private Long id;
     private double balance;
     private Date createdAt;
     private String status;

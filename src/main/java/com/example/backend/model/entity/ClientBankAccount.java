@@ -15,5 +15,6 @@ public class ClientBankAccount extends BankAccount{
     @Enumerated(EnumType.STRING)
     AccountType accountType;
     @OneToOne
+    @JoinColumn(name = "customer_id")
     private Client customer;
 }
