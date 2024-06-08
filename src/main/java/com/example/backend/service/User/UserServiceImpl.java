@@ -1,7 +1,7 @@
 package com.example.backend.service.User;
 
 import com.example.backend.jwt.JwtProvider;
-import com.example.backend.model.Roles;
+import com.example.backend.model.enumeration.Roles;
 import com.example.backend.repository.AgentRepository;
 import com.example.backend.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;

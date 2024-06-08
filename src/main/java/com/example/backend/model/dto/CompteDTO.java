@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class CompteDTO {
     private Long id;
-    private double plafond;
+    private double balance;
     private String type;
     private Long clientId;
 }

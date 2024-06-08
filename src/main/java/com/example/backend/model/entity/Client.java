@@ -1,13 +1,11 @@
 package com.example.backend.model.entity;
 
 
-import com.example.backend.model.Roles;
+import com.example.backend.model.enumeration.Roles;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,10 +15,10 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-    String nom;
-    String prenom;
+    String lastname;
+    String firstname;
     String email;
-    String telephone;
+    String phonenumber;
     private String password;
     @Lob
     @Column(columnDefinition = "LONGBLOB")
@@ -33,17 +31,15 @@ public class Client {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Roles role = Roles.ROLE_CLIENT;
-//
-//    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Compte> comptes;
 
-    public Client(Long id, String nom, String prenom, String email, String telephone,
+
+    public Client(Long id, String lastname, String firstname, String email, String phonenumber,
                   String password, byte[] cinRectoPath, byte[] cinVersoPath, boolean firstLogin) {
         this.id = id;
-        this.nom = nom;
-        this.prenom = prenom;
+        this.lastname = lastname;
+        this.firstname = firstname;
         this.email = email;
-        this.telephone = telephone;
+        this.phonenumber = phonenumber;
         this.password = password;
         this.cinRectoPath = cinRectoPath;
         this.cinVersoPath = cinVersoPath;

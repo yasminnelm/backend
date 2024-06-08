@@ -1,10 +1,8 @@
 package com.example.backend.model.entity;
 
-import com.example.backend.model.Roles;
+import com.example.backend.model.enumeration.Roles;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.sql.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,14 +13,14 @@ public class Agent {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String uid;
-    private String nom;
-    private String prenom;
+    private String lastname;
+    private String firstname;
     @Column(unique = true)
     private String email;
     private String password;
     private String numCin;
-    private String adresse;
-    private String telephone;
+    private String address;
+    private String phonenumber;
     private String description;
     @Lob
     @Column(columnDefinition = "LONGBLOB")
@@ -30,8 +28,8 @@ public class Agent {
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] cinVersoPath;
-    private String dateNaissance;
-    private Long numPatente;
+    private String birthdate;
+    private Long numLicence;
     private Long numRegCom;
     private boolean firstLogin = true;
     @Enumerated(EnumType.STRING)

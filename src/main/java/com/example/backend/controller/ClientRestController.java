@@ -40,9 +40,9 @@ public class ClientRestController {
 
             ClientDTO clientDTO = new ClientDTO();
             clientDTO.setNom(nom);
-            clientDTO.setPrenom(prenom);
+            clientDTO.setFirstname(prenom);
             clientDTO.setEmail(email);
-            clientDTO.setTelephone(telephone);
+            clientDTO.setPhonenumber(telephone);
             clientDTO.setCinRectoPath(cinRectoBytes);
             clientDTO.setCinVersoPath(cinVersoBytes);
 

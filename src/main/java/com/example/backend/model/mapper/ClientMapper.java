@@ -13,10 +13,10 @@ public class ClientMapper {
 
         return new ClientDTO(
                 client.getId(),
-                client.getNom(),
-                client.getPrenom(),
+                client.getLastname(),
+                client.getFirstname(),
                 client.getEmail(),
-                client.getTelephone(),
+                client.getPhonenumber(),
                 client.getPassword(),
                 client.getCinRectoPath(),
                 client.getCinVersoPath(),
@@ -30,10 +30,10 @@ public class ClientMapper {
         }
         return new Client(
                 clientDTO.getId(),
-                clientDTO.getNom(),
-                clientDTO.getPrenom(),
+                clientDTO.getLastname(),
+                clientDTO.getFirstname(),
                 clientDTO.getEmail(),
-                clientDTO.getTelephone(),
+                clientDTO.getPhonenumber(),
                 clientDTO.getPassword(),
                 clientDTO.getCinRectoPath(),
                 clientDTO.getCinVersoPath(),

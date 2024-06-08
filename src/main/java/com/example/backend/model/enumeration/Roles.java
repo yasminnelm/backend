@@ -1,4 +1,4 @@
-package com.example.backend.model;
+package com.example.backend.model.enumeration;
 
 public enum Roles {
     ROLE_ADMIN,

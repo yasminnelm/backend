@@ -7,9 +7,7 @@ import com.example.backend.repository.AgentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,15 +48,15 @@ public class AgentService {
         agent.setUid(uid);
 
         agent.setPassword(passwordEncoder.encode(password));
-        agent.setNom(nom);
-        agent.setPrenom(prenom);
+        agent.setLastname(nom);
+        agent.setFirstname(prenom);
         agent.setEmail(email);
         agent.setNumCin(numCin);
-        agent.setAdresse(adresse);
-        agent.setTelephone(telephone);
+        agent.setAddress(adresse);
+        agent.setPhonenumber(telephone);
         agent.setDescription(description);
-        agent.setDateNaissance(dateNaissance);
-        agent.setNumPatente(numPatente);
+        agent.setBirthdate(dateNaissance);
+        agent.setNumLicence(numPatente);
         agent.setNumRegCom(numRegCom);
 
         try {
@@ -100,15 +98,15 @@ public class AgentService {
         Optional<Agent> optionalAgent = agentRepository.findById(id);
         if (optionalAgent.isPresent()) {
             Agent agent = optionalAgent.get();
-            agent.setNom(updatedAgentDTO.getNom());
-            agent.setPrenom(updatedAgentDTO.getPrenom());
+            agent.setLastname(updatedAgentDTO.getNom());
+            agent.setFirstname(updatedAgentDTO.getPrenom());
             agent.setEmail(updatedAgentDTO.getEmail());
             agent.setNumCin(updatedAgentDTO.getNumCin());
-            agent.setAdresse(updatedAgentDTO.getAdresse());
-            agent.setTelephone(updatedAgentDTO.getTelephone());
+            agent.setAddress(updatedAgentDTO.getAddress());
+            agent.setPhonenumber(updatedAgentDTO.getTelephone());
             agent.setDescription(updatedAgentDTO.getDescription());
-            agent.setDateNaissance(updatedAgentDTO.getDateNaissance());
-            agent.setNumPatente(updatedAgentDTO.getNumPatente());
+            agent.setBirthdate(updatedAgentDTO.getDateNaissance());
+            agent.setNumLicence(updatedAgentDTO.getNumPatente());
             agent.setNumRegCom(updatedAgentDTO.getNumRegCom());
             agent.setFirstLogin(updatedAgentDTO.isFirstLogin());
             // Note: Password is not updated here for security reasons.
