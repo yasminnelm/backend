@@ -27,17 +27,17 @@ public class AgentService {
         this.mailPasswordService = mailPasswordService;
     }
 
-    public AgentDTO createAgent(String nom, String prenom, String email, String emailConfirmation,
-                                String numCin, String adresse, String telephone, String description,
-                                String dateNaissance, Long numPatente, Long numRegCom,
+    public AgentDTO createAgent(String lastname, String firstname, String email, String emailConfirmation,
+                                String numCin, String address, String phonenumber, String description,
+                                String birthdate, Long numLicence, Long numRegCom,
                                 byte[] cinRectoPath, byte[] cinVersoPath) {
         //confirmation de l'email
         if (!email.equals(emailConfirmation)) {
             throw new IllegalArgumentException("Email does not match confirmation");
         }
-        //confirmation du numero de telephone
-        telephone = "+" + telephone;
-        if (!telephone.matches("^\\+212[6-7][0-9]{8}$")) {
+        //confirmation du numero de phonenumber
+        phonenumber = "+" + phonenumber;
+        if (!phonenumber.matches("^\\+212[6-7][0-9]{8}$")) {
             throw new IllegalArgumentException("Phone number does not match the moroccan form");
         }
 
@@ -48,15 +48,15 @@ public class AgentService {
         agent.setUid(uid);
 
         agent.setPassword(passwordEncoder.encode(password));
-        agent.setLastname(nom);
-        agent.setFirstname(prenom);
+        agent.setLastname(lastname);
+        agent.setFirstname(firstname);
         agent.setEmail(email);
         agent.setNumCin(numCin);
-        agent.setAddress(adresse);
-        agent.setPhonenumber(telephone);
+        agent.setAddress(address);
+        agent.setPhonenumber(phonenumber);
         agent.setDescription(description);
-        agent.setBirthdate(dateNaissance);
-        agent.setNumLicence(numPatente);
+        agent.setBirthdate(birthdate);
+        agent.setNumLicence(numLicence);
         agent.setNumRegCom(numRegCom);
 
         try {
@@ -98,15 +98,15 @@ public class AgentService {
         Optional<Agent> optionalAgent = agentRepository.findById(id);
         if (optionalAgent.isPresent()) {
             Agent agent = optionalAgent.get();
-            agent.setLastname(updatedAgentDTO.getNom());
-            agent.setFirstname(updatedAgentDTO.getPrenom());
+            agent.setLastname(updatedAgentDTO.getLastname());
+            agent.setFirstname(updatedAgentDTO.getFirstname());
             agent.setEmail(updatedAgentDTO.getEmail());
             agent.setNumCin(updatedAgentDTO.getNumCin());
             agent.setAddress(updatedAgentDTO.getAddress());
-            agent.setPhonenumber(updatedAgentDTO.getTelephone());
+            agent.setPhonenumber(updatedAgentDTO.getPhonenumber());
             agent.setDescription(updatedAgentDTO.getDescription());
-            agent.setBirthdate(updatedAgentDTO.getDateNaissance());
-            agent.setNumLicence(updatedAgentDTO.getNumPatente());
+            agent.setBirthdate(updatedAgentDTO.getBirthdate());
+            agent.setNumLicence(updatedAgentDTO.getNumLicence());
             agent.setNumRegCom(updatedAgentDTO.getNumRegCom());
             agent.setFirstLogin(updatedAgentDTO.isFirstLogin());
             // Note: Password is not updated here for security reasons.

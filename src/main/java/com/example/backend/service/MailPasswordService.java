@@ -26,8 +26,8 @@ public class MailPasswordService {
     public void sendPasswordByEmail(String recipientEmail, String password) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(recipientEmail);
-        message.setSubject("Votre mot de passe par défaut");
-        message.setText("Votre mot de passe par défaut est : " + password);
+        message.setSubject("Your default password");
+        message.setText("Your default password is: " + password);
         emailSender.send(message);
     }
 }

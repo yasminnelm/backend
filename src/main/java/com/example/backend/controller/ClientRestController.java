@@ -23,26 +23,26 @@ public class ClientRestController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createClient(@RequestParam String nom,
-                                          @RequestParam String prenom,
+    public ResponseEntity<?> createClient(@RequestParam String lastname,
+                                          @RequestParam String firstname,
                                           @RequestParam String email,
-                                          @RequestParam String telephone,
+                                          @RequestParam String phonenumber,
                                           @RequestParam("cinRecto") MultipartFile cinRecto,
                                           @RequestParam("cinVerso") MultipartFile cinVerso) {
         try {
             byte[] cinRectoBytes = cinRecto.getBytes();
             byte[] cinVersoBytes = cinVerso.getBytes();
 
-            telephone = "+" + telephone;
-            if (!telephone.matches("^\\+212[6-7][0-9]{8}$")) {
+            phonenumber = "+" + phonenumber;
+            if (!phonenumber.matches("^\\+212[6-7][0-9]{8}$")) {
                 throw new IllegalArgumentException("Phone number does not match the Moroccan form");
             }
 
             ClientDTO clientDTO = new ClientDTO();
-            clientDTO.setNom(nom);
-            clientDTO.setFirstname(prenom);
+            clientDTO.setLastname(lastname);
+            clientDTO.setFirstname(firstname);
             clientDTO.setEmail(email);
-            clientDTO.setPhonenumber(telephone);
+            clientDTO.setPhonenumber(phonenumber);
             clientDTO.setCinRectoPath(cinRectoBytes);
             clientDTO.setCinVersoPath(cinVersoBytes);
 
