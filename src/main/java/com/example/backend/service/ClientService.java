@@ -75,7 +75,7 @@ public class ClientService {
         }
         String tempPassword = mailPasswordService.generateDefaultPassword();
         clientDTO.setPassword(passwordEncoder.encode(tempPassword));
-        return clientRepository.save(ClientMapper.toEntity(clientDTO));
+        return clientRepository.save(ClientMapper.INSTANCE.toEntity(clientDTO));
     }
 
 

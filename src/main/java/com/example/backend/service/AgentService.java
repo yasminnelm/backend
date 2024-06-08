@@ -68,7 +68,7 @@ public class AgentService {
         Agent savedAgent = agentRepository.save(agent);
         mailPasswordService.sendPasswordByEmail(email, password);
 
-        return AgentMapper.toDto(savedAgent);
+        return AgentMapper.INSTANCE.toDto(savedAgent);
 
     }
 
@@ -76,7 +76,7 @@ public class AgentService {
      public List<AgentDTO> findAllAgents()
          {
              return agentRepository.findAll().stream()
-                     .map(AgentMapper::toDto)
+                     .map(AgentMapper.INSTANCE::toDto)
                      .collect(Collectors.toList());
          }
 
@@ -84,12 +84,12 @@ public class AgentService {
      public Optional<AgentDTO> getAgentById(Long id)
      {
          return agentRepository.findById(id)
-                 .map(AgentMapper::toDto);
+                 .map(AgentMapper.INSTANCE::toDto);
      }
 
     public AgentDTO getAgentByEmail(String email)
     {
-        return AgentMapper.toDto(
+        return AgentMapper.INSTANCE.toDto(
                 agentRepository.findAgentByEmail(email)
         );
     }
@@ -112,7 +112,7 @@ public class AgentService {
             // Note: Password is not updated here for security reasons.
 
             Agent updatedAgent = agentRepository.save(agent);
-            return AgentMapper.toDto(updatedAgent);
+            return AgentMapper.INSTANCE.toDto(updatedAgent);
         } else {
             throw new IllegalArgumentException("Agent not found");
         }
