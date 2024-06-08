@@ -1,13 +1,8 @@
 package com.example.backend.model.dto;
 
-import com.example.backend.model.enumeration.CompteType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Lob;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
