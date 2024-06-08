@@ -94,11 +94,14 @@ package com.example.backend.service;//package com.example.backend.service;
 //}
 
 
+import com.example.backend.model.dto.ClientDTO;
 import com.example.backend.model.entity.Client;
+import com.example.backend.model.mapper.ClientMapper;
 import com.example.backend.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -106,22 +109,22 @@ import java.util.Optional;
 public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
-
-
     @Autowired
-    private CMIService cmiService;
+    private RestTemplate restTemplate;
+    @Autowired
+    private CMIService cmiService = new CMIService(restTemplate);
     @Autowired
     private MailPasswordService mailPasswordService;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public Client registerClient(Client client) {
-        if (!cmiService.isResponseFavorable()) {
+    public Client registerClient(ClientDTO clientDTO) {
+        if (!cmiService.isResponseFavorable(clientDTO)) {
             throw new IllegalArgumentException("CMI response is not favorable");
         }
         String tempPassword = mailPasswordService.generateDefaultPassword();
-        client.setPassword(passwordEncoder.encode(tempPassword));  // Hashing du mot de passe temporaire
-        return clientRepository.save(client);
+        clientDTO.setPassword(passwordEncoder.encode(tempPassword));  // Hashing du mot de passe temporaire
+        return clientRepository.save(ClientMapper.toEntity(clientDTO));
     }
 
     public Optional<Client> verifyPassword(String email, String password) {

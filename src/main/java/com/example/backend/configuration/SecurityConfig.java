@@ -52,7 +52,7 @@ public class SecurityConfig {
                                 .hasRole("ADMIN")
                                 .requestMatchers("api/clients")
                                 .hasAnyRole("ADMIN","AGENT")
-                                .requestMatchers("api/cmi/verify")
+                                .requestMatchers("api/verify")
                                 .permitAll()
 //                                .requestMatchers("/login/agent","/login/client", "/login/admin").permitAll()
                                 .anyRequest().authenticated()
