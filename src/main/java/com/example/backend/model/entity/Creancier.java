@@ -23,8 +23,9 @@ public class Creancier {
     @OneToMany(mappedBy = "creancier")
     private List<Facture> factures;
 
+
     @OneToOne
-    private ProfessionalCustomerAccount professionalCustomerAccount;
+    private ProfessionalBankAccount professionalBankAccount;
 
 }
 

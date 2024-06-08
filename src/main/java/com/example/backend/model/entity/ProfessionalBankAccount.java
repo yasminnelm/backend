@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@DiscriminatorValue("CA")
-public class ProfessionalCustomerAccount extends BankAccount{
+@DiscriminatorValue("PA")
+public class ProfessionalBankAccount extends BankAccount{
     @OneToOne
     private Creancier creancier;
 }

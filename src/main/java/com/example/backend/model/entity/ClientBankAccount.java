@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @DiscriminatorValue("CA")
-public class ClientAccount extends BankAccount{
+public class ClientBankAccount extends BankAccount{
       @Enumerated(EnumType.STRING)
       AccountType accountType;
       @OneToOne
