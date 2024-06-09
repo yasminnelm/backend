@@ -1,5 +1,6 @@
 package com.example.backend.model.dto;
 
+import com.example.backend.model.enumeration.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class BankAccountDTO {
     private Long id;
+    private Long accountNumber;
+    private AccountType accountType;
     private double balance;
     private Date createdAt;
     private String status;

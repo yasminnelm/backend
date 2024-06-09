@@ -65,19 +65,13 @@
 
 package com.example.backend.service;
 
-import com.example.backend.model.dto.BillerDTO;
 import com.example.backend.model.dto.ClientDTO;
-import com.example.backend.model.entity.BankAccount;
-import com.example.backend.model.entity.ClientBankAccount;
 import com.example.backend.repository.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 @Service
 public class CMIService {

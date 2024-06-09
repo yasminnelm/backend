@@ -12,16 +12,17 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-
 //cette classe est pour enregistrer les opérations de compte
 public class AccountOperation {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date operationDate;
     private double amount;
     @Enumerated(EnumType.STRING)
     private OperationType type;
     @ManyToOne
-    private ProfessionalBankAccount professionalBankAccount;
+    @JoinColumn(name = "bank_account_id", nullable = false)
+    private BankAccount bankAccount;
     private String description;
 }

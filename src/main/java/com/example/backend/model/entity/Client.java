@@ -13,19 +13,27 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Client {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     String lastname;
+
     String firstname;
+
     String email;
+
     String phonenumber;
+
     private String password;
+
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] cinRectoPath;
+
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] cinVersoPath;
+
     private boolean firstLogin = true;
 
     @Enumerated(EnumType.STRING)

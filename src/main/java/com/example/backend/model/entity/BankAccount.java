@@ -1,6 +1,7 @@
 package com.example.backend.model.entity;
 
 import com.example.backend.model.enumeration.AccountStatus;
+import com.example.backend.model.enumeration.AccountType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,12 +21,23 @@ import java.util.List;
 
 public class BankAccount {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private double balance;
+
+    private Long accountNumber;
+
     private Date createdAt;
+
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
+    @Enumerated(EnumType.STRING)
+    AccountType accountType;
+
+    @OneToMany(mappedBy = "bankAccount",fetch = FetchType.LAZY)
+    private List<AccountOperation> accountOperationList;
     //FetchType.LAZY est pour dire a hibernate de ne pas charger la collection lors de la recuperation des infos de compte
     //pour lui dire de les importer aussi on utilise le mode FetchType.EAGER
     //par defaut c'est LAZY pour que la collection ne soit chargé qu'a la demande

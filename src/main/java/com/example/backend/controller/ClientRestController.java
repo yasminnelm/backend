@@ -1,10 +1,15 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.dto.ClientDTO;
+import com.example.backend.model.entity.BankAccount;
+import com.example.backend.model.entity.Client;
+import com.example.backend.model.enumeration.AccountType;
+import com.example.backend.service.BankAccountService;
 import com.example.backend.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +20,8 @@ import java.util.List;
 @PreAuthorize("hasAuthority('ROLE_AGENT')")
 @RequestMapping("/api/clients")
 public class ClientRestController {
-
+    @Autowired
+    BankAccountService bankAccountService;
     private final ClientService clientService;
 
     @Autowired
@@ -29,8 +35,10 @@ public class ClientRestController {
     }
 
     @PostMapping("")
+    @Transactional
     public ResponseEntity<?> createClient(@RequestParam String lastname,
                                           @RequestParam String firstname,
+                                          @RequestParam String account_type,
                                           @RequestParam String email,
                                           @RequestParam String phonenumber,
                                           @RequestParam("cinRecto") MultipartFile cinRecto,
@@ -52,8 +60,14 @@ public class ClientRestController {
             clientDTO.setCinRectoPath(cinRectoBytes);
             clientDTO.setCinVersoPath(cinVersoBytes);
 
-            clientService.registerClient(clientDTO);
-            return ResponseEntity.ok("Account created successfully in JIBI");
+            Client savedClient = clientService.registerClient(clientDTO);
+            System.out.println(savedClient.getEmail());
+            System.out.println(AccountType.valueOf(account_type));
+            BankAccount savedBankAccount = bankAccountService.createAccountWithClient(AccountType.valueOf(account_type),savedClient);
+            System.out.println(savedBankAccount.getAccountNumber());
+
+
+            return ResponseEntity.ok("Account & Client created successfully in JIBI");
 
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Error reading files: " + e.getMessage());
