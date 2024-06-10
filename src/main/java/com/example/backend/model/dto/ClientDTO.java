@@ -1,5 +1,6 @@
 package com.example.backend.model.dto;
 
+import com.example.backend.model.entity.BankAccount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ public class ClientDTO {
     String email;
     String phonenumber;
     String password;
+    BankAccountDTO account ;
     private byte[] cinRectoPath;
     private byte[] cinVersoPath;
     private boolean firstLogin;

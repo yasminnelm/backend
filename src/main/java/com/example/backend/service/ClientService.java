@@ -88,8 +88,11 @@ public class ClientService {
     }
     public Client updateClient(Client existingClient, BankAccount bankAccount) {
 
+
              existingClient.setBankAccount(bankAccount);
             return clientRepository.save(existingClient);
         }
-
+    public void deleteClientById(Long id){
+        clientRepository.deleteById(id);
+    }
 }

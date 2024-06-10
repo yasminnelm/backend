@@ -41,6 +41,7 @@ public class Client {
     private Roles role = Roles.ROLE_CLIENT;
 
     @OneToOne
+
     @JoinColumn(name = "bankAccount_id")
     BankAccount bankAccount;
 

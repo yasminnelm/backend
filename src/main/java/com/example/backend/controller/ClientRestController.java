@@ -21,6 +21,7 @@ import java.util.List;
 @RestController
 @PreAuthorize("hasAuthority('ROLE_AGENT')")
 @RequestMapping("/api/clients")
+@CrossOrigin("*")
 public class ClientRestController {
     @Autowired
     BankAccountService bankAccountService;
@@ -76,6 +77,15 @@ public class ClientRestController {
 
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Error reading files: " + e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
+        }
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteClient(@PathVariable Long id) {
+        try {
+            clientService.deleteClientById(id);
+            return ResponseEntity.ok("Client deleted successfully");
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
         }

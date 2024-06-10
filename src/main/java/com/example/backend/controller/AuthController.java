@@ -38,6 +38,8 @@ public class AuthController {
         AgentDTO agentDTO = agentService.getAgentByEmail(email);
         Client client = clientRepository.findClientByEmail(email);
         Authentication authentication = null;
+        Map<String, String> response = new HashMap<>();
+
 
         if (agentDTO != null) {
             if (!agentDTO.getPassword().equals(password)) {
@@ -51,6 +53,8 @@ public class AuthController {
                                 new SimpleGrantedAuthority("ROLE_AGENT")
                         )
                 );
+                response.put("firstlogin", String.valueOf(agentDTO.isFirstLogin()));
+
             } else {
                 authentication = new UsernamePasswordAuthenticationToken(
                         email,
@@ -65,7 +69,9 @@ public class AuthController {
                 return ResponseEntity.status(401).body("Incorrect password");
             }
             if (client.isFirstLogin()) {
+                response.put("firstlogin", String.valueOf(true));
                 return ResponseEntity.status(302).body("First login, change your password");
+
             }
             authentication = new UsernamePasswordAuthenticationToken(
                     email,
@@ -90,9 +96,11 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.generateToken(authentication);
         // Créer un objet JSON pour renvoyer le token et le rôle
-        Map<String, String> response = new HashMap<>();
         response.put("token", token);
         response.put("role", authentication.getAuthorities().iterator().next().getAuthority());
 
+
+
         return ResponseEntity.ok(response);    }
 }
+

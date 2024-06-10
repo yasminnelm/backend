@@ -15,15 +15,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/password")
+@CrossOrigin("*")
 public class PasswordController {
 
 
@@ -42,19 +42,22 @@ public class PasswordController {
     }
 
     @PostMapping("/agent")
-    public ResponseEntity<?> changeAgentPassword(
+    public ResponseEntity<Map<String, String>> changeAgentPassword(
             @RequestParam("email") String email,
             @RequestParam("newPassword") String newPassword,
             @RequestParam("confirmPassword") String confirmPassword) {
 
+        Map<String, String> response = new HashMap<>();
 
         Agent agent = agentRepository.findAgentByEmail(email);
 
         if (agent == null) {
-            return ResponseEntity.status(404).body("Agent not found");
+            response.put("message", "Agent not found");
+            return ResponseEntity.status(404).body(response);
         }
         if(!newPassword.equals(confirmPassword)) {
-            return ResponseEntity.status(400).body("Passwords do not match");
+            response.put("message", "Passwords do not match");
+            return ResponseEntity.status(400).body(response);
         } else {
             agent.setPassword(newPassword);
             agent.setFirstLogin(false);
@@ -66,18 +69,19 @@ public class PasswordController {
                             Collections.singletonList(
                                     new SimpleGrantedAuthority("ROLE_AGENT")
                             )
-
-            );
+                    );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
 
             String token = jwtProvider.generateToken(authentication);
 
-            return ResponseEntity.status(200).body(token);
+            response.put("token", token);
+            response.put("message", "Password changed successfully");
+            return ResponseEntity.status(200).body(response);
         }
 
 
-    }
+
+}
 
     @PostMapping("/client")
     public ResponseEntity<?> changeClientPassword(
