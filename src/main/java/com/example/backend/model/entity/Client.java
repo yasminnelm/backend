@@ -13,19 +13,27 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Client {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     String lastname;
+
     String firstname;
+
     String email;
+
     String phonenumber;
+
     private String password;
+
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] cinRectoPath;
+
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] cinVersoPath;
+
     private boolean firstLogin = true;
 
     @Enumerated(EnumType.STRING)
@@ -33,9 +41,9 @@ public class Client {
     private Roles role = Roles.ROLE_CLIENT;
 
     @OneToOne
-    @JoinColumn(name = "account_id")
-    private BankAccount account;
 
+    @JoinColumn(name = "bankAccount_id")
+    BankAccount bankAccount;
 
     public Client(Long id, String lastname, String firstname, String email, String phonenumber,
                   String password, byte[] cinRectoPath, byte[] cinVersoPath, boolean firstLogin) {

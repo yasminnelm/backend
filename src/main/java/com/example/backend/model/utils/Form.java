@@ -1,16 +1,17 @@
-package com.example.backend.model.dto;
-
+package com.example.backend.model.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class CompteDTO {
-    private Long id;
-    private double balance;
+
+public class Form {
     private String type;
-    private Long clientId;
+    private List<FormField> fields;
+
 }

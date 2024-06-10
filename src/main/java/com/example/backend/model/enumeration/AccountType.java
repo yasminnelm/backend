@@ -5,8 +5,8 @@ import lombok.Data;
 public enum AccountType {
     COMPTE_200("Compte 200", 200),
     COMPTE_5000("Compte 5000", 5000),
-    COMPTE_20000("Compte 20000", 20000);
-
+    COMPTE_20000("Compte 20000", 20000),
+    COMPTE_PROFESSIONNEL("Professional Account", Double.MAX_VALUE);
     private final String description;
     private final double plafond;
 

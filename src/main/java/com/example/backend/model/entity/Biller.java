@@ -13,16 +13,14 @@ import java.util.List;
 @Entity
 public class Biller {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String billCategory;
-    @OneToMany(mappedBy = "biller", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "biller",fetch = FetchType.LAZY)
     private List<Bill> bills;
 
-    @OneToMany(mappedBy = "biller")
+    @OneToMany(mappedBy = "biller", fetch = FetchType.LAZY)
     private List<Invoice> invoices;
-
-
-
 }
+

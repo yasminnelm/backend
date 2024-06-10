@@ -13,6 +13,6 @@ public class AccountOperationDTO {
     private Date operationDate;
     private double amount;
     private String type;
-    private String bankAccountId;
+    private Long bankAccountId;
     private String description;
 }

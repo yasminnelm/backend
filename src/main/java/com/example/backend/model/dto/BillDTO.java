@@ -1,5 +1,6 @@
 package com.example.backend.model.dto;
 
+import com.example.backend.model.entity.Biller;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

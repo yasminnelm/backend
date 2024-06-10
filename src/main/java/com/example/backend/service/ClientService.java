@@ -42,6 +42,7 @@ package com.example.backend.service;//package com.example.backend.service;
 
 
 import com.example.backend.model.dto.ClientDTO;
+import com.example.backend.model.entity.BankAccount;
 import com.example.backend.model.entity.Client;
 import com.example.backend.model.mapper.ClientMapper;
 import com.example.backend.repository.ClientRepository;
@@ -85,10 +86,13 @@ public class ClientService {
         clientDTO.setPassword(tempPassword);
         return clientRepository.save(ClientMapper.INSTANCE.toEntity(clientDTO));
     }
+    public Client updateClient(Client existingClient, BankAccount bankAccount) {
 
+
+             existingClient.setBankAccount(bankAccount);
+            return clientRepository.save(existingClient);
+        }
     public void deleteClientById(Long id){
         clientRepository.deleteById(id);
     }
-
-
 }
