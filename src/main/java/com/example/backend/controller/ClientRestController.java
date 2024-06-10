@@ -64,6 +64,7 @@ public class ClientRestController {
             System.out.println(savedClient.getEmail());
             System.out.println(AccountType.valueOf(account_type));
             BankAccount savedBankAccount = bankAccountService.createAccountWithClient(AccountType.valueOf(account_type),savedClient);
+            clientService.updateClient(savedClient,savedBankAccount);
             System.out.println(savedBankAccount.getAccountNumber());
 
 
