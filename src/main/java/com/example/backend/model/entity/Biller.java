@@ -17,12 +17,9 @@ public class Biller {
     private Long id;
     private String name;
     private String billCategory;
-    @OneToMany(mappedBy = "biller", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "biller",fetch = FetchType.LAZY)
     private List<Bill> bills;
 
-    @OneToMany(mappedBy = "biller")
+    @OneToMany(mappedBy = "biller", fetch = FetchType.LAZY)
     private List<Invoice> invoices;
-
-
-
 }

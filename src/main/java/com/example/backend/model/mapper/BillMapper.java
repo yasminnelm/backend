@@ -11,9 +11,9 @@ public interface BillMapper {
 
     BillMapper INSTANCE = Mappers.getMapper(BillMapper.class);
 
-    @Mapping(source = "biller.id", target = "billerId")
+    //    @Mapping(source = "biller.id", target = "billerId")
     BillDTO toDto(Bill bill);
 
-    @Mapping(source = "billerId", target = "biller.id")
+    //    @Mapping(source = "billerId", target = "biller.id")
     Bill toEntity(BillDTO billDTO);
 }
