@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 @RequestMapping("/api/agents")
+@CrossOrigin("*")
 public class AgentRestController {
 
     private final AgentService agentService;

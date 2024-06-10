@@ -86,6 +86,9 @@ public class ClientService {
         return clientRepository.save(ClientMapper.INSTANCE.toEntity(clientDTO));
     }
 
+    public void deleteClientById(Long id){
+        clientRepository.deleteById(id);
+    }
 
 
 }

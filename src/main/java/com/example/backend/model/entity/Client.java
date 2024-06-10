@@ -32,6 +32,10 @@ public class Client {
     @Column(nullable = false)
     private Roles role = Roles.ROLE_CLIENT;
 
+    @OneToOne
+    @JoinColumn(name = "account_id")
+    private BankAccount account;
+
 
     public Client(Long id, String lastname, String firstname, String email, String phonenumber,
                   String password, byte[] cinRectoPath, byte[] cinVersoPath, boolean firstLogin) {

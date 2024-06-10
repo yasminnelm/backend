@@ -11,15 +11,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/login")
+@CrossOrigin("*")
 public class AuthController {
 
     private final AgentService agentService;
@@ -38,6 +38,8 @@ public class AuthController {
         AgentDTO agentDTO = agentService.getAgentByEmail(email);
         Client client = clientRepository.findClientByEmail(email);
         Authentication authentication = null;
+        Map<String, String> response = new HashMap<>();
+
 
         if (agentDTO != null) {
             if (!agentDTO.getPassword().equals(password)) {
@@ -51,24 +53,25 @@ public class AuthController {
                                 new SimpleGrantedAuthority("ROLE_AGENT")
                         )
                 );
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                String token = jwtProvider.generateToken(authentication);
-                System.out.println(token);
-                return ResponseEntity.status(302).body("First login, change your password");
+                response.put("firstlogin", String.valueOf(agentDTO.isFirstLogin()));
+
+            } else {
+                authentication = new UsernamePasswordAuthenticationToken(
+                        email,
+                        password,
+                        Collections.singletonList(
+                                new SimpleGrantedAuthority("ROLE_AGENT")
+                        )
+                );
             }
-            authentication = new UsernamePasswordAuthenticationToken(
-                    email,
-                    password,
-                    Collections.singletonList(
-                            new SimpleGrantedAuthority("ROLE_AGENT")
-                    )
-            );
         } else if (client != null) {
             if (!client.getPassword().equals(password)) {
                 return ResponseEntity.status(401).body("Incorrect password");
             }
             if (client.isFirstLogin()) {
+                response.put("firstlogin", String.valueOf(true));
                 return ResponseEntity.status(302).body("First login, change your password");
+
             }
             authentication = new UsernamePasswordAuthenticationToken(
                     email,
@@ -78,7 +81,7 @@ public class AuthController {
                     )
             );
         } else {
-            if (!email.equals("admin") || !password.equals("12345")) {
+            if (!email.equals("admin@gmail.com") || !password.equals("12345")) {
                 return ResponseEntity.status(401).body("Incorrect password");
             }
             authentication = new UsernamePasswordAuthenticationToken(
@@ -92,6 +95,11 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.generateToken(authentication);
-        return ResponseEntity.ok(token);
-    }
+        // Créer un objet JSON pour renvoyer le token et le rôle
+        response.put("token", token);
+        response.put("role", authentication.getAuthorities().iterator().next().getAuthority());
+
+
+
+        return ResponseEntity.ok(response);    }
 }
