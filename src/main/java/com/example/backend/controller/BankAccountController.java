@@ -1,8 +1,10 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.dto.AccountOperationDTO;
+import com.example.backend.model.entity.BankAccount;
 import com.example.backend.model.entity.Biller;
 import com.example.backend.model.utils.Form;
+import com.example.backend.repository.BankAccountRepository;
 import com.example.backend.repository.BillerRepository;
 import com.example.backend.service.BankAccountService;
 import com.example.backend.service.FormService;
@@ -38,6 +40,19 @@ public class BankAccountController {
         try {
             bankAccountService.transfer(sourceAccountId, destinationAccountId, amount);
             return ResponseEntity.ok("Transfer completed successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
+        }
+    }
+    @PostMapping("/payment")
+    public ResponseEntity<?> payment(@RequestParam Long sourceAccountId,
+                                           @RequestParam double amount) {
+        try {
+            BankAccount bankAccount = bankAccountService.findBackAccount(sourceAccountId);
+            bankAccountService.debit(bankAccount, amount);
+            return ResponseEntity.ok("Payment completed successfully");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         } catch (RuntimeException e) {

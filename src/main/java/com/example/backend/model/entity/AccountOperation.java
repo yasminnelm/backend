@@ -1,6 +1,7 @@
 package com.example.backend.model.entity;
 
 import com.example.backend.model.enumeration.OperationType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class AccountOperation {
     private OperationType type;
     @ManyToOne
     @JoinColumn(name = "bank_account_id", nullable = false)
+    @JsonIgnore
     private BankAccount bankAccount;
     private String description;
 }

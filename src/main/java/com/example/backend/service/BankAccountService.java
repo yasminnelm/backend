@@ -33,6 +33,11 @@ public class BankAccountService {
     private final AccountOperationMapper accountOperationMapper = AccountOperationMapper.INSTANCE;
 
 
+
+    public BankAccount findBackAccount(Long id) {
+        return bankAccountRepository.findBankAccountById(id);
+    }
+
     public BankAccount createAccountWithClient(AccountType accountType, Client client) {
         BankAccount bankAccount = new BankAccount();
 //        bankAccount.setId(2L);
