@@ -1,6 +1,8 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.dto.AccountOperationDTO;
 import com.example.backend.model.dto.ClientDTO;
+import com.example.backend.model.entity.AccountOperation;
 import com.example.backend.model.entity.BankAccount;
 import com.example.backend.model.entity.Client;
 import com.example.backend.model.enumeration.AccountType;
@@ -63,7 +65,10 @@ public class ClientRestController {
             Client savedClient = clientService.registerClient(clientDTO);
             System.out.println(savedClient.getEmail());
             System.out.println(AccountType.valueOf(account_type));
+
             BankAccount savedBankAccount = bankAccountService.createAccountWithClient(AccountType.valueOf(account_type),savedClient);
+            clientService.updateClient(savedClient,savedBankAccount);
+
             System.out.println(savedBankAccount.getAccountNumber());
 
 
@@ -71,6 +76,30 @@ public class ClientRestController {
 
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Error reading files: " + e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
+        }
+    }
+    @PostMapping("/transfer")
+    public ResponseEntity<?> transferMoney(@RequestParam Long sourceAccountId,
+                                           @RequestParam Long destinationAccountId,
+                                           @RequestParam double amount) {
+        try {
+            bankAccountService.transfer(sourceAccountId, destinationAccountId, amount);
+            return ResponseEntity.ok("Transfer completed successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
+        }
+    }
+    @GetMapping("/operations")
+    public ResponseEntity<?> getAccountOperations(@RequestParam Long accountId) {
+        try {
+            List<AccountOperationDTO> operations = bankAccountService.getAccountOperations(accountId);
+            return ResponseEntity.ok(operations);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
         }

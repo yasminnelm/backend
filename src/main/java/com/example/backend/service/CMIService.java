@@ -66,6 +66,7 @@
 package com.example.backend.service;
 
 import com.example.backend.model.dto.ClientDTO;
+import com.example.backend.model.entity.BankAccount;
 import com.example.backend.repository.BankAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -126,7 +127,7 @@ public class CMIService {
 //        }
 //    }
 //
-//    public double getBalance(Long clientId) {
+//    public static double getBalance(Long clientId) {
 //        BankAccount bankAccount = bankAccountRepository.findByClientId(clientId);
 //        if (bankAccount != null) {
 //            return bankAccount.getBalance();

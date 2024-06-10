@@ -46,7 +46,7 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(Authorize -> Authorize
-                                .requestMatchers("/login","/password")
+                                .requestMatchers("/login","/password/client","password/agent")
                                 .permitAll()
                                 .requestMatchers("/api/agents")
                                 .hasRole("ADMIN")
