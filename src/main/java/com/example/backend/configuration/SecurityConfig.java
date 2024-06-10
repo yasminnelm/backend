@@ -53,6 +53,8 @@ public class SecurityConfig {
                                 .hasRole("ADMIN")
                                 .requestMatchers("/api/clients")
                                 .hasAnyRole("ADMIN","AGENT")
+                                .requestMatchers("/api/bankaccount")
+                                .hasRole("CLIENT")
 //                                .requestMatchers("/api/verify")
 //                                .permitAll()
                                 .anyRequest().authenticated()

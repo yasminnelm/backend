@@ -80,28 +80,4 @@ public class ClientRestController {
             return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
         }
     }
-    @PostMapping("/transfer")
-    public ResponseEntity<?> transferMoney(@RequestParam Long sourceAccountId,
-                                           @RequestParam Long destinationAccountId,
-                                           @RequestParam double amount) {
-        try {
-            bankAccountService.transfer(sourceAccountId, destinationAccountId, amount);
-            return ResponseEntity.ok("Transfer completed successfully");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
-        }
-    }
-    @GetMapping("/operations")
-    public ResponseEntity<?> getAccountOperations(@RequestParam Long accountId) {
-        try {
-            List<AccountOperationDTO> operations = bankAccountService.getAccountOperations(accountId);
-            return ResponseEntity.ok(operations);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(400).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
-        }
-    }
 }

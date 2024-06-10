@@ -30,16 +30,4 @@ public class CMIController {
         response.setFavorable(isFavorable);
         return ResponseEntity.ok(response);
     }
-
-//    @GetMapping("/ListeCreanciers")
-//    public ResponseEntity<List<BillerDTO>> listCreditors() {
-//        List<BillerDTO> creditors = cmiService.getListeCreanciers();
-//        return ResponseEntity.ok(creditors);
-//    }
-//
-//    @GetMapping("/balance/{clientId}")
-//    public ResponseEntity<Double> getBalance(@PathVariable Long clientId) {
-//        double balance = cmiService.getBalance(clientId);
-//        return ResponseEntity.ok(balance);
-//    }
 }
