@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @PreAuthorize("hasAuthority('ROLE_AGENT')")
@@ -73,7 +75,10 @@ public class ClientRestController {
             System.out.println(savedBankAccount.getAccountNumber());
 
 
-            return ResponseEntity.ok("Account & Client created successfully in JIBI");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Account & Client created successfully in JIBI");
+
+            return ResponseEntity.ok(response);
 
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Error reading files: " + e.getMessage());
