@@ -46,7 +46,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(Authorize -> Authorize
 
-                                .requestMatchers("/login","/password/agent","/password/client","/api/verify","/api/listecreanciers/","/qr/")
+                                .requestMatchers("/login","/password/agent","/password/client","/api/verify","/api/listecreanciers/","/qr/","/api/codes/send")
 
                                 .permitAll()
                                 .requestMatchers("/api/agents")
