@@ -20,13 +20,13 @@ public class BankAccountService {
 
     public BankAccount createAccountWithClient(AccountType accountType, Client client) {
         BankAccount bankAccount = new BankAccount();
-        bankAccount.setId(2L);
+//        bankAccount.setId(2L);
         bankAccount.setAccountNumber(generateAccountNumber());
         bankAccount.setAccountType(accountType);
         bankAccount.setBalance(0.00);
         bankAccount.setCreatedAt(new Date());
         bankAccount.setStatus(AccountStatus.CREATED);
-        bankAccount.setCustomer(client);
+        bankAccount.setClient(client);
         BankAccount savedBankAccount = bankAccountRepository.save(bankAccount);
         return savedBankAccount;
     }

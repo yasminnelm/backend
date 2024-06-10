@@ -12,11 +12,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 //on peut mettre InheritanceType.SINGLE_TABLE pour creer une table pour chaque class
 //et dans ce cas on est pas besoin de mettre dans les class filles : //@DiscriminatorValue
 //et on me la class a abstract si on ne veut pas creer une table pour la class mere
-@DiscriminatorColumn(name = "TYPE",length = 4)
+//@DiscriminatorColumn(name = "TYPE",length = 4)
 @Entity
 
 public class BankAccount {
@@ -44,6 +44,6 @@ public class BankAccount {
 //    @OneToMany(mappedBy = "bankAccount",fetch = FetchType.LAZY)
 //    private List<AccountOperation> accountOperationList;
     @OneToOne
-    @JoinColumn(name = "customer_id")
-    private Client customer;
+    @JoinColumn(name = "client_id")
+    private Client client;
 }

@@ -18,5 +18,5 @@ public class BankAccountDTO {
     private double balance;
     private Date createdAt;
     private String status;
-    private ClientDTO customer;
+    private ClientDTO clientDTO;
 }

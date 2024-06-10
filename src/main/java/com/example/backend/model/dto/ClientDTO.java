@@ -17,4 +17,5 @@ public class ClientDTO {
     private byte[] cinRectoPath;
     private byte[] cinVersoPath;
     private boolean firstLogin;
+    private BankAccountDTO bankAccountDTO;
 }
