@@ -59,6 +59,7 @@ public class ClientRestController {
             clientDTO.setPhonenumber(phonenumber);
             clientDTO.setCinRectoPath(cinRectoBytes);
             clientDTO.setCinVersoPath(cinVersoBytes);
+            clientDTO.setFirstLogin(true);
 
             Client savedClient = clientService.registerClient(clientDTO);
             System.out.println(savedClient.getEmail());

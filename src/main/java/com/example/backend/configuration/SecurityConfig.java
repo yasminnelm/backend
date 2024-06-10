@@ -28,8 +28,7 @@ import java.util.List;
 @EnableWebSecurity
 @PropertySource("classpath:application.properties")
 public class SecurityConfig {
-    @Value("${cmi.service.url}")
-    private String cmiServiceUrl;
+
 
 
 //    @Bean
@@ -46,14 +45,14 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(Authorize -> Authorize
-                                .requestMatchers("/login","/password")
+                                .requestMatchers("/login","/password/agent","/password/client","/api/verify","/api/listecreanciers/")
                                 .permitAll()
                                 .requestMatchers("/api/agents")
                                 .hasRole("ADMIN")
                                 .requestMatchers("/api/clients")
                                 .hasAnyRole("ADMIN","AGENT")
-                                .requestMatchers("/api/verify")
-                                .permitAll()
+//                                .requestMatchers("/api/verify")
+//                                .permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
