@@ -45,7 +45,7 @@ public class InvoiceService {
             invoice.setIssueDate(new Date());
             invoice.setDeadline(calculateDeadline(new Date()));
             invoice.setInvoiceStatus(InvoiceStatus.PENDING);
-            invoice.setReferencePayment(generateReferencePayment());
+            invoice.setReferencePayment(generateAccountNumber());
 
             Invoice savedInvoice = invoiceRepository.save(invoice);
             return invoiceMapper.toInvoiceDTO(savedInvoice);
@@ -74,7 +74,11 @@ public class InvoiceService {
         return calendar.getTime();
     }
 
-    private String generateReferencePayment() {
-        return UUID.randomUUID().toString();
+//    private String generateReferencePayment() {
+//        return UUID.randomUUID().toString();
+//    }
+    private long generateAccountNumber() {
+        Random random = new Random();
+        return 10000000000L + (long) (random.nextDouble() * 90000000000L);
     }
 }
