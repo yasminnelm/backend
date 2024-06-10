@@ -23,3 +23,4 @@ public class Biller {
     @OneToMany(mappedBy = "biller", fetch = FetchType.LAZY)
     private List<Invoice> invoices;
 }
+

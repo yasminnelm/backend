@@ -61,6 +61,7 @@ public class ClientRestController {
             clientDTO.setPhonenumber(phonenumber);
             clientDTO.setCinRectoPath(cinRectoBytes);
             clientDTO.setCinVersoPath(cinVersoBytes);
+            clientDTO.setFirstLogin(true);
 
             Client savedClient = clientService.registerClient(clientDTO);
             System.out.println(savedClient.getEmail());
@@ -68,7 +69,6 @@ public class ClientRestController {
 
             BankAccount savedBankAccount = bankAccountService.createAccountWithClient(AccountType.valueOf(account_type),savedClient);
             clientService.updateClient(savedClient,savedBankAccount);
-
             System.out.println(savedBankAccount.getAccountNumber());
 
 

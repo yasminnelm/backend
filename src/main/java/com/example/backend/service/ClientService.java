@@ -87,11 +87,9 @@ public class ClientService {
         return clientRepository.save(ClientMapper.INSTANCE.toEntity(clientDTO));
     }
     public Client updateClient(Client existingClient, BankAccount bankAccount) {
-        existingClient.setBankAccount(bankAccount);
-        return clientRepository.save(existingClient);
-}
 
-
-
+             existingClient.setBankAccount(bankAccount);
+            return clientRepository.save(existingClient);
+        }
 
 }

@@ -11,4 +11,5 @@ import java.util.List;
 public interface BillerRepository extends JpaRepository<Biller, Long> {
     @Query("SELECT b FROM Biller b LEFT JOIN FETCH b.bills")
     List<Biller> findAllWithBills();
+
 }
