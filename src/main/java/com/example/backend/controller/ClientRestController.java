@@ -65,8 +65,8 @@ public class ClientRestController {
             clientDTO.setFirstLogin(true);
 
             Client savedClient = clientService.registerClient(clientDTO);
-            System.out.println(savedClient.getEmail());
-            System.out.println(AccountType.valueOf(account_type));
+            //System.out.println(savedClient.getEmail());
+            //System.out.println(AccountType.valueOf(account_type));
 
             BankAccount savedBankAccount = bankAccountService.createAccountWithClient(AccountType.valueOf(account_type),savedClient);
             clientService.updateClient(savedClient,savedBankAccount);

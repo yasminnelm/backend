@@ -68,11 +68,6 @@ public class AuthController {
             if (!client.getPassword().equals(password)) {
                 return ResponseEntity.status(401).body("Incorrect password");
             }
-            if (client.isFirstLogin()) {
-                response.put("firstlogin", String.valueOf(true));
-                return ResponseEntity.status(302).body("First login, change your password");
-
-            }
             authentication = new UsernamePasswordAuthenticationToken(
                     email,
                     password,
@@ -80,6 +75,11 @@ public class AuthController {
                             new SimpleGrantedAuthority("ROLE_CLIENT")
                     )
             );
+            if (client.isFirstLogin()) {
+                response.put("firstlogin", String.valueOf(agentDTO.isFirstLogin()));
+                //return ResponseEntity.status(302).body("First login, change your password");
+            }
+
         } else {
             if (!email.equals("admin@gmail.com") || !password.equals("12345")) {
                 return ResponseEntity.status(401).body("Incorrect password");

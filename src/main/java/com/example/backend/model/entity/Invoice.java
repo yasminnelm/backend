@@ -25,7 +25,7 @@ public class Invoice {
     private Double amount;
     private Date issueDate;
     private Date deadline;
-    private String referencePayment;
+    private Long referencePayment;
 
     @Enumerated(EnumType.STRING)
     private InvoiceStatus invoiceStatus;
