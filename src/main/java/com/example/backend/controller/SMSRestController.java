@@ -1,8 +1,5 @@
 package com.example.backend.controller;
 
-
-
-
 import com.example.backend.model.dto.CodeDTO;
 import com.example.backend.service.SMSService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +16,7 @@ public class SMSRestController {
     private SMSService smsService;
 
     @PostMapping("/send")
-    public void sendCode(@RequestBody CodeDTO codeDTO) {
-        smsService.sendCode(codeDTO);
+    public String sendCode(@RequestBody CodeDTO codeDTO) {
+        return smsService.sendCode(codeDTO);
     }
 }

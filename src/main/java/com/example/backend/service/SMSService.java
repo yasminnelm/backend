@@ -1,19 +1,14 @@
 package com.example.backend.service;
 
-
 import com.example.backend.model.dto.CodeDTO;
 import com.example.backend.model.entity.CodeVerification;
 import com.example.backend.repository.CodeVerificationRepository;
 import com.vonage.client.sms.MessageStatus;
 import com.vonage.client.sms.SmsSubmissionResponse;
 import com.vonage.client.sms.messages.TextMessage;
-
 import com.vonage.client.VonageClient;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import java.time.LocalDateTime;
 import java.util.Random;
@@ -27,7 +22,7 @@ public class SMSService {
     @Autowired
     private CodeVerificationRepository codeVerificationRepository;
 
-    public void sendCode(CodeDTO codeDTO) {
+    public String sendCode(CodeDTO codeDTO) {
         String code = generateCode();
         LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(3);
 
@@ -51,6 +46,8 @@ public class SMSService {
                 throw new RuntimeException("Message failed with error: " + submission.getErrorText());
             }
         });
+
+        return code;
     }
 
     private String generateCode() {

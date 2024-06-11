@@ -2,9 +2,15 @@ package com.example.backend.controller;
 
 import com.example.backend.jwt.JwtProvider;
 import com.example.backend.model.dto.AgentDTO;
+import com.example.backend.model.dto.BankAccountDTO;
+import com.example.backend.model.dto.ClientDTO;
 import com.example.backend.model.entity.Client;
+import com.example.backend.model.mapper.BankAccountMapper;
+import com.example.backend.model.mapper.ClientMapper;
+import com.example.backend.repository.BankAccountRepository;
 import com.example.backend.repository.ClientRepository;
 import com.example.backend.service.AgentService;
+import com.example.backend.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,12 +31,13 @@ public class AuthController {
     private final AgentService agentService;
     private final ClientRepository clientRepository;
     private final JwtProvider jwtProvider;
-
+    private final BankAccountRepository bankAccountRepository;
     @Autowired
-    public AuthController(AgentService agentService, ClientRepository clientRepository, JwtProvider jwtProvider) {
+    public AuthController(AgentService agentService, ClientRepository clientRepository, JwtProvider jwtProvider, BankAccountRepository bankAccountRepository) {
         this.agentService = agentService;
         this.clientRepository = clientRepository;
         this.jwtProvider = jwtProvider;
+        this.bankAccountRepository = bankAccountRepository;
     }
 
     @PostMapping
@@ -75,6 +82,10 @@ public class AuthController {
                             new SimpleGrantedAuthority("ROLE_CLIENT")
                     )
             );
+            ClientDTO clientDTO = ClientMapper.INSTANCE.toDto(client);
+            System.out.println(clientDTO);
+            response.put("clientDTO", String.valueOf(clientDTO));
+            response.put("clientId", String.valueOf(client.getId()));
             if (client.isFirstLogin()) {
                 response.put("firstlogin", String.valueOf(agentDTO.isFirstLogin()));
                 //return ResponseEntity.status(302).body("First login, change your password");

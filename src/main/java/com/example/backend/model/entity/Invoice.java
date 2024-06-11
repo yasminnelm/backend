@@ -30,5 +30,6 @@ public class Invoice {
     @Enumerated(EnumType.STRING)
     private InvoiceStatus invoiceStatus;
 
+    private String description;
 
 }

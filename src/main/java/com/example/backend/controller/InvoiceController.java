@@ -19,8 +19,10 @@ public class InvoiceController {
     public ResponseEntity<InvoiceDTO> createInvoice(
             @RequestParam Long billerId,
             @RequestParam Long clientId,
-            @RequestParam Double amount) {
-        InvoiceDTO invoiceDTO = invoiceService.createInvoice(billerId, clientId, amount);
+            @RequestParam Double amount,
+            @RequestParam String description
+    ) {
+        InvoiceDTO invoiceDTO = invoiceService.createInvoice(billerId, clientId, amount,description);
         return ResponseEntity.ok(invoiceDTO);
     }
 

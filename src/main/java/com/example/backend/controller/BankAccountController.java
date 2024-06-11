@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @PreAuthorize("hasAuthority('ROLE_CLIENT')")
@@ -39,7 +41,10 @@ public class BankAccountController {
                                            @RequestParam double amount) {
         try {
             bankAccountService.transfer(sourceAccountId, destinationAccountId, amount);
-            return ResponseEntity.ok("Transfer completed successfully");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "transfer done successfully");
+
+            return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         } catch (RuntimeException e) {

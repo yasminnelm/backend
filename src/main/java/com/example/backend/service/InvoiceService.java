@@ -30,7 +30,7 @@ public class InvoiceService {
     @Autowired
     private InvoiceMapper invoiceMapper;
 
-    public InvoiceDTO createInvoice(Long billerId, Long clientId, Double amount) {
+    public InvoiceDTO createInvoice(Long billerId, Long clientId, Double amount,String description) {
         Optional<Biller> billerOpt = billerRepository.findById(billerId);
         Optional<Client> clientOpt = clientRepository.findById(clientId);
 
@@ -42,6 +42,7 @@ public class InvoiceService {
             invoice.setBiller(biller);
             invoice.setClient(client);
             invoice.setAmount(amount);
+            invoice.setDescription(description);
             invoice.setIssueDate(new Date());
             invoice.setDeadline(calculateDeadline(new Date()));
             invoice.setInvoiceStatus(InvoiceStatus.PENDING);
