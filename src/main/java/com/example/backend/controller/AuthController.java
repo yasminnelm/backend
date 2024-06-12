@@ -10,6 +10,7 @@ import com.example.backend.model.mapper.ClientMapper;
 import com.example.backend.repository.BankAccountRepository;
 import com.example.backend.repository.ClientRepository;
 import com.example.backend.service.AgentService;
+import com.example.backend.service.BankAccountService;
 import com.example.backend.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +32,13 @@ public class AuthController {
     private final AgentService agentService;
     private final ClientRepository clientRepository;
     private final JwtProvider jwtProvider;
-    private final BankAccountRepository bankAccountRepository;
+    private final BankAccountService bankAccountService;
     @Autowired
-    public AuthController(AgentService agentService, ClientRepository clientRepository, JwtProvider jwtProvider, BankAccountRepository bankAccountRepository) {
+    public AuthController(AgentService agentService, ClientRepository clientRepository, JwtProvider jwtProvider, BankAccountService bankAccountService) {
         this.agentService = agentService;
         this.clientRepository = clientRepository;
         this.jwtProvider = jwtProvider;
-        this.bankAccountRepository = bankAccountRepository;
+        this.bankAccountService = bankAccountService;
     }
 
     @PostMapping
@@ -45,7 +46,7 @@ public class AuthController {
         AgentDTO agentDTO = agentService.getAgentByEmail(email);
         Client client = clientRepository.findClientByEmail(email);
         Authentication authentication = null;
-        Map<String, String> response = new HashMap<>();
+        Map<Object, Object> response = new HashMap<>();
 
 
         if (agentDTO != null) {
@@ -84,7 +85,10 @@ public class AuthController {
             );
             ClientDTO clientDTO = ClientMapper.INSTANCE.toDto(client);
             System.out.println(clientDTO);
-            response.put("clientDTO", String.valueOf(clientDTO));
+            clientDTO.setCinRectoPath(null);
+            clientDTO.setCinVersoPath(null);
+            clientDTO.setBankAccountDTO(bankAccountService.findBankAccountByClient(client));
+            response.put("clientDTO", clientDTO);
             response.put("clientId", String.valueOf(client.getId()));
             if (client.isFirstLogin()) {
                 response.put("firstlogin", String.valueOf(agentDTO.isFirstLogin()));

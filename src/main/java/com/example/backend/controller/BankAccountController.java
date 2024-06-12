@@ -1,9 +1,12 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.dto.AccountOperationDTO;
+import com.example.backend.model.entity.AccountOperation;
 import com.example.backend.model.entity.BankAccount;
 import com.example.backend.model.entity.Biller;
+import com.example.backend.model.enumeration.OperationType;
 import com.example.backend.model.utils.Form;
+import com.example.backend.repository.AccountOperationRepository;
 import com.example.backend.repository.BankAccountRepository;
 import com.example.backend.repository.BillerRepository;
 import com.example.backend.service.BankAccountService;
@@ -13,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +32,10 @@ public class BankAccountController {
     BankAccountService bankAccountService;
     @Autowired
     private FormService formService;
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
+    @Autowired
+    private AccountOperationRepository accountOperationRepository;
 
 
     @GetMapping("/listecreanciers")
@@ -36,11 +44,11 @@ public class BankAccountController {
     }
 
     @PostMapping("/transfer")
-    public ResponseEntity<?> transferMoney(@RequestParam Long sourceAccountId,
-                                           @RequestParam Long destinationAccountId,
+    public ResponseEntity<?> transferMoney(@RequestParam Long sourceAccountNumber,
+                                           @RequestParam Long destinationAccountNumber,
                                            @RequestParam double amount) {
         try {
-            bankAccountService.transfer(sourceAccountId, destinationAccountId, amount);
+            bankAccountService.transfer(sourceAccountNumber, destinationAccountNumber, amount);
             Map<String, String> response = new HashMap<>();
             response.put("message", "transfer done successfully");
 
@@ -57,7 +65,18 @@ public class BankAccountController {
         try {
             BankAccount bankAccount = bankAccountService.findBackAccount(sourceAccountId);
             bankAccountService.debit(bankAccount, amount);
-            return ResponseEntity.ok("Payment completed successfully");
+//            return ResponseEntity.ok("Payment completed successfully");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "payment done successfully");
+            //Debit operation
+            AccountOperation debitOperation = new AccountOperation();
+            debitOperation.setOperationDate(new Date());
+            debitOperation.setDescription("invoice payment ");
+            debitOperation.setAmount(amount);
+            debitOperation.setType(OperationType.DEBIT);
+            debitOperation.setBankAccount(bankAccountRepository.getReferenceById(sourceAccountId));
+            accountOperationRepository.save(debitOperation);
+            return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         } catch (RuntimeException e) {

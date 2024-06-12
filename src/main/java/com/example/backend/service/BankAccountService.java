@@ -37,6 +37,9 @@ public class BankAccountService {
     public BankAccount findBackAccount(Long id) {
         return bankAccountRepository.findBankAccountById(id);
     }
+    public BankAccountDTO findBankAccountByClient(Client client) {
+        return BankAccountMapper.INSTANCE.toDto(bankAccountRepository.findByClientId(client.getId()));
+    }
 
     public BankAccount createAccountWithClient(AccountType accountType, Client client) {
         BankAccount bankAccount = new BankAccount();
@@ -111,12 +114,15 @@ public class BankAccountService {
         return true;
     }
     @Transactional
-    public void transfer(Long sourceAccountId, Long destinationAccountId, double amount) {
-        BankAccount sourceAccount = bankAccountRepository.findById(sourceAccountId)
-                .orElseThrow(() -> new IllegalArgumentException("Source account not found."));
-        BankAccount destinationAccount = bankAccountRepository.findById(destinationAccountId)
-                .orElseThrow(() -> new IllegalArgumentException("Destination account not found."));
-
+    public void transfer(Long sourceAccountNumber, Long destinationAccountNumber, double amount) {
+        BankAccount sourceAccount = bankAccountRepository.findBankAccountByAccountNumber(sourceAccountNumber);
+              if(sourceAccount==null) {
+                  throw new IllegalArgumentException("Source account not found.");
+              }
+              BankAccount destinationAccount = bankAccountRepository.findBankAccountByAccountNumber(destinationAccountNumber);
+        if(destinationAccount==null) {
+            throw new IllegalArgumentException("Destination account not found.");
+        }
         debit(sourceAccount, amount);
         credit(destinationAccount, amount);
         Client sourceClient = sourceAccount.getClient();
