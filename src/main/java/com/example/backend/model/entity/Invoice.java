@@ -26,10 +26,12 @@ public class Invoice {
     private Date issueDate;
     private Date deadline;
     private Long referencePayment;
+    @JoinColumn(name = "description")
+    private String description;
+
 
     @Enumerated(EnumType.STRING)
     private InvoiceStatus invoiceStatus;
 
-    private String description;
 
 }

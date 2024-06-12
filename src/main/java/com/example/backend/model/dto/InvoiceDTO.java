@@ -16,4 +16,5 @@ public class InvoiceDTO {
     private Date deadline;
     private String referencePayment;
     private InvoiceStatus invoiceStatus;
+    private String description;
 }
