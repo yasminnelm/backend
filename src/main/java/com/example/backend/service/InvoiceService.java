@@ -42,12 +42,11 @@ public class InvoiceService {
             invoice.setBiller(biller);
             invoice.setClient(client);
             invoice.setAmount(amount);
-            invoice.setDescription(description);
             invoice.setIssueDate(new Date());
             invoice.setDeadline(calculateDeadline(new Date()));
             invoice.setInvoiceStatus(InvoiceStatus.PENDING);
             invoice.setReferencePayment(generateAccountNumber());
-
+            invoice.setDescription(description);
             Invoice savedInvoice = invoiceRepository.save(invoice);
             return invoiceMapper.toInvoiceDTO(savedInvoice);
         } else {

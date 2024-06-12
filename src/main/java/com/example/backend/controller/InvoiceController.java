@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/invoices")
+@CrossOrigin("*")
 public class InvoiceController {
 
     @Autowired
@@ -20,8 +21,7 @@ public class InvoiceController {
             @RequestParam Long billerId,
             @RequestParam Long clientId,
             @RequestParam Double amount,
-            @RequestParam String description
-    ) {
+            @RequestParam String description) {
         InvoiceDTO invoiceDTO = invoiceService.createInvoice(billerId, clientId, amount,description);
         return ResponseEntity.ok(invoiceDTO);
     }

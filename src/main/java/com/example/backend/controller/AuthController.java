@@ -84,15 +84,16 @@ public class AuthController {
                     )
             );
             ClientDTO clientDTO = ClientMapper.INSTANCE.toDto(client);
-            System.out.println(clientDTO);
+            //System.out.println(clientDTO);
             clientDTO.setCinRectoPath(null);
             clientDTO.setCinVersoPath(null);
             clientDTO.setBankAccountDTO(bankAccountService.findBankAccountByClient(client));
             response.put("clientDTO", clientDTO);
             response.put("clientId", String.valueOf(client.getId()));
             if (client.isFirstLogin()) {
-                response.put("firstlogin", String.valueOf(agentDTO.isFirstLogin()));
+                response.put("firstlogin", String.valueOf(clientDTO.isFirstLogin()));
                 //return ResponseEntity.status(302).body("First login, change your password");
+
             }
 
         } else {
